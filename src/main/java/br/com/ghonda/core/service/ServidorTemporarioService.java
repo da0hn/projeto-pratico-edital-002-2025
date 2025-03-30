@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -20,6 +21,7 @@ public class ServidorTemporarioService {
 
     private final EnderecoService enderecoService;
 
+    @Transactional
     public ServidorSimpleDetailPayload registrar(final NewServidorTemporarioPayload payload) {
         log.debug("m=registrarServidorTemporario(payload={})", payload);
 
@@ -36,6 +38,7 @@ public class ServidorTemporarioService {
         return ServidorSimpleDetailPayload.of(newServidorTemporario);
     }
 
+    @Transactional(readOnly = true)
     public ServidorSimpleDetailPayload findById(final Long id) {
         log.debug("m=findById(id={})", id);
         return this.servidorTemporarioRepository.findById(id)
@@ -43,6 +46,7 @@ public class ServidorTemporarioService {
             .orElseThrow(() -> new ResourceNotFoundException("Servidor temporário não encontrado"));
     }
 
+    @Transactional
     public ServidorSimpleDetailPayload update(@Valid final UpdateServidorTemporarioPayload payload) {
         log.debug("m=updateServidorTemporario(payload={})", payload);
 
