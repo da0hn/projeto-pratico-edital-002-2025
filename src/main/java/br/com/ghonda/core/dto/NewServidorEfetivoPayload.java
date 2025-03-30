@@ -8,7 +8,7 @@ import lombok.extern.jackson.Jacksonized;
 
 @Builder
 @Jacksonized
-public record ServidorEfetivoPayload(
+public record NewServidorEfetivoPayload(
     @JsonUnwrapped
     @Valid
     PessoaDetailPayload pessoa,

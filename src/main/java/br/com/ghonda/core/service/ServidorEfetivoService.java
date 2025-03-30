@@ -1,7 +1,8 @@
 package br.com.ghonda.core.service;
 
 import br.com.ghonda.core.domain.ServidorEfetivo;
-import br.com.ghonda.core.dto.ServidorEfetivoPayload;
+import br.com.ghonda.core.dto.NewServidorEfetivoPayload;
+import br.com.ghonda.core.dto.ServidorSimpleDetailPayload;
 import br.com.ghonda.core.repository.ServidorEfetivoRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ public class ServidorEfetivoService {
     private final EnderecoService enderecoService;
 
     @Transactional
-    public void registrar(final ServidorEfetivoPayload payload) {
+    public ServidorSimpleDetailPayload registrar(final NewServidorEfetivoPayload payload) {
         log.debug("m=registrar(payload={})", payload);
 
         final var newServidorEfetivo = ServidorEfetivo.of(payload);
@@ -29,6 +30,8 @@ public class ServidorEfetivoService {
         this.servidorEfetivoRepository.save(newServidorEfetivo);
 
         log.info("Servidor efetivo {} registrado com sucesso", newServidorEfetivo);
+
+        return ServidorSimpleDetailPayload.of(newServidorEfetivo);
     }
 
 }

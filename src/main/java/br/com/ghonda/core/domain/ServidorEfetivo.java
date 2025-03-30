@@ -1,6 +1,6 @@
 package br.com.ghonda.core.domain;
 
-import br.com.ghonda.core.dto.ServidorEfetivoPayload;
+import br.com.ghonda.core.dto.NewServidorEfetivoPayload;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -28,7 +28,7 @@ public class ServidorEfetivo extends Pessoa {
     @Column(name = "se_matricula", length = 20)
     private String matricula;
 
-    public static ServidorEfetivo of(final ServidorEfetivoPayload payload) {
+    public static ServidorEfetivo of(final NewServidorEfetivoPayload payload) {
         return ServidorEfetivo.builder()
             .id(null)
             .matricula(payload.matricula())

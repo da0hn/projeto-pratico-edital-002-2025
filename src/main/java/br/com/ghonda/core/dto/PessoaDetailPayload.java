@@ -1,6 +1,7 @@
 package br.com.ghonda.core.dto;
 
 import br.com.ghonda.core.annotations.Enumerator;
+import br.com.ghonda.core.domain.ServidorEfetivo;
 import br.com.ghonda.core.domain.Sexo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
@@ -13,6 +14,7 @@ import lombok.extern.jackson.Jacksonized;
 
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Builder
 @Jacksonized
@@ -33,5 +35,18 @@ public record PessoaDetailPayload(
     @NotEmpty(message = "Pelo menos um endereço deve ser informado")
     Set<EnderecoDetailPayload> enderecos
 ) {
+
+    public static PessoaDetailPayload of(final ServidorEfetivo servidor) {
+        return new PessoaDetailPayload(
+            servidor.getNome(),
+            servidor.getDataNascimento(),
+            servidor.getSexo(),
+            servidor.getNomeMae(),
+            servidor.getNomePai(),
+            servidor.getEnderecos().stream()
+                .map(e -> EnderecoDetailPayload.of(e))
+                .collect(Collectors.toSet())
+        );
+    }
 
 }

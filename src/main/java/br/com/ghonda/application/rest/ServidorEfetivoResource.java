@@ -1,7 +1,8 @@
 package br.com.ghonda.application.rest;
 
 import br.com.ghonda.application.rest.payload.ApiResponse;
-import br.com.ghonda.core.dto.ServidorEfetivoPayload;
+import br.com.ghonda.core.dto.NewServidorEfetivoPayload;
+import br.com.ghonda.core.dto.ServidorSimpleDetailPayload;
 import br.com.ghonda.core.service.ServidorEfetivoService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -22,14 +23,13 @@ public class ServidorEfetivoResource {
     public ServidorEfetivoResource(final ServidorEfetivoService service) { this.service = service; }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<?>> registrarServidorEfetivo(@Valid @RequestBody final ServidorEfetivoPayload payload) {
+    public ResponseEntity<ApiResponse<ServidorSimpleDetailPayload>> registrarServidorEfetivo(@Valid @RequestBody final NewServidorEfetivoPayload payload) {
         log.info("Registrar servidor efetivo: {}", payload);
 
-        this.service.registrar(payload);
+        final var response = this.service.registrar(payload);
 
-        return ResponseEntity
-            .status(HttpStatus.CREATED)
-            .body(null);
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(ApiResponse.of(response));
     }
 
 }
