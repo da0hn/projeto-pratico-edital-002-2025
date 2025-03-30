@@ -1,7 +1,7 @@
 package br.com.ghonda.core.dto;
 
 import br.com.ghonda.core.annotations.Enumerator;
-import br.com.ghonda.core.domain.ServidorEfetivo;
+import br.com.ghonda.core.domain.Pessoa;
 import br.com.ghonda.core.domain.Sexo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.Valid;
@@ -36,15 +36,15 @@ public record PessoaDetailPayload(
     Set<EnderecoDetailPayload> enderecos
 ) {
 
-    public static PessoaDetailPayload of(final ServidorEfetivo servidor) {
+    public static PessoaDetailPayload of(final Pessoa pessoa) {
         return new PessoaDetailPayload(
-            servidor.getNome(),
-            servidor.getDataNascimento(),
-            servidor.getSexo(),
-            servidor.getNomeMae(),
-            servidor.getNomePai(),
-            servidor.getEnderecos().stream()
-                .map(e -> EnderecoDetailPayload.of(e))
+            pessoa.getNome(),
+            pessoa.getDataNascimento(),
+            pessoa.getSexo(),
+            pessoa.getNomeMae(),
+            pessoa.getNomePai(),
+            pessoa.getEnderecos().stream()
+                .map(EnderecoDetailPayload::of)
                 .collect(Collectors.toSet())
         );
     }

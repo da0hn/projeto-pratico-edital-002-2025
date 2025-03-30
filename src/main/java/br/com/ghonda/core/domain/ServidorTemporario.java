@@ -1,5 +1,6 @@
 package br.com.ghonda.core.domain;
 
+import br.com.ghonda.core.dto.NewServidorTemporarioPayload;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -30,6 +31,19 @@ public class ServidorTemporario extends Pessoa {
 
     @Column(name = "st_data_demissao")
     private LocalDate dataDemissao;
+
+    public static ServidorTemporario of(final NewServidorTemporarioPayload payload) {
+        return ServidorTemporario.builder()
+            .id(null)
+            .dataAdmissao(payload.dataAdmissao())
+            .dataDemissao(payload.dataDemissao())
+            .nome(payload.pessoa().nome())
+            .nomeMae(payload.pessoa().nomeMae())
+            .nomePai(payload.pessoa().nomePai())
+            .sexo(payload.pessoa().sexo())
+            .dataNascimento(payload.pessoa().dataNascimento())
+            .build();
+    }
 
     @Override
     public String toString() {

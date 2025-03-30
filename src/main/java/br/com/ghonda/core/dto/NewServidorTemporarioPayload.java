@@ -11,7 +11,7 @@ import java.time.LocalDate;
     endDate = "dataDemissao",
     message = "A data de demissão deve ser maior que a data de admissão"
 )
-public record ServidorTemporarioPayload(
+public record NewServidorTemporarioPayload(
     @JsonUnwrapped
     PessoaDetailPayload pessoa,
     @NotNull(message = "Data de admissão é obrigatória")
