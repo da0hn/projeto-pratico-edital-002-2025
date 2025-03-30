@@ -1,7 +1,7 @@
 package br.com.ghonda.core.service;
 
 import br.com.ghonda.core.domain.ServidorTemporario;
-import br.com.ghonda.core.domain.ServidorTemporarioRepository;
+import br.com.ghonda.core.repository.ServidorTemporarioRepository;
 import br.com.ghonda.core.dto.NewServidorTemporarioPayload;
 import br.com.ghonda.core.dto.ServidorSimpleDetailPayload;
 import br.com.ghonda.core.dto.UpdateServidorTemporarioPayload;
