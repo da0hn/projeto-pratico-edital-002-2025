@@ -3,6 +3,7 @@ package br.com.ghonda.core.service;
 import br.com.ghonda.core.domain.ServidorEfetivo;
 import br.com.ghonda.core.dto.NewServidorEfetivoPayload;
 import br.com.ghonda.core.dto.ServidorSimpleDetailPayload;
+import br.com.ghonda.core.dto.UpdateServidorEfetivoPayload;
 import br.com.ghonda.core.exceptions.ResourceNotFoundException;
 import br.com.ghonda.core.repository.ServidorEfetivoRepository;
 import lombok.AllArgsConstructor;
@@ -42,6 +43,30 @@ public class ServidorEfetivoService {
         return this.servidorEfetivoRepository.findById(id)
             .map(ServidorSimpleDetailPayload::of)
             .orElseThrow(() -> new ResourceNotFoundException("Servidor efetivo não encontrado"));
+    }
+
+    @Transactional
+    public ServidorSimpleDetailPayload update(final UpdateServidorEfetivoPayload payload) {
+        log.debug("m=update(payload={})", payload);
+        final var servidorEfetivo = this.servidorEfetivoRepository.findById(payload.id())
+            .orElseThrow(() -> new ResourceNotFoundException("Servidor efetivo não encontrado"));
+
+        servidorEfetivo.setMatricula(payload.matricula());
+        servidorEfetivo.setNome(payload.pessoa().nome());
+        servidorEfetivo.setNomeMae(payload.pessoa().nomeMae());
+        servidorEfetivo.setNomePai(payload.pessoa().nomePai());
+        servidorEfetivo.setSexo(payload.pessoa().sexo());
+        servidorEfetivo.setDataNascimento(payload.pessoa().dataNascimento());
+
+        servidorEfetivo.getEnderecos().clear();
+
+        payload.pessoa().enderecos().stream()
+            .map(this.enderecoService::findOrCreate)
+            .forEach(servidorEfetivo::addEndereco);
+
+        this.servidorEfetivoRepository.save(servidorEfetivo);
+
+        return ServidorSimpleDetailPayload.of(servidorEfetivo);
     }
 
 }
