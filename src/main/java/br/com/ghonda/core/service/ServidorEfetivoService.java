@@ -3,6 +3,7 @@ package br.com.ghonda.core.service;
 import br.com.ghonda.core.domain.ServidorEfetivo;
 import br.com.ghonda.core.dto.NewServidorEfetivoPayload;
 import br.com.ghonda.core.dto.ServidorSimpleDetailPayload;
+import br.com.ghonda.core.exceptions.ResourceNotFoundException;
 import br.com.ghonda.core.repository.ServidorEfetivoRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ServidorEfetivoService {
 
     private final ServidorEfetivoRepository servidorEfetivoRepository;
+
     private final EnderecoService enderecoService;
 
     @Transactional
@@ -32,6 +34,14 @@ public class ServidorEfetivoService {
         log.info("Servidor efetivo {} registrado com sucesso", newServidorEfetivo);
 
         return ServidorSimpleDetailPayload.of(newServidorEfetivo);
+    }
+
+    @Transactional(readOnly = true)
+    public ServidorSimpleDetailPayload findById(final Long id) {
+        log.debug("m=findById(id={})", id);
+        return this.servidorEfetivoRepository.findById(id)
+            .map(ServidorSimpleDetailPayload::of)
+            .orElseThrow(() -> new ResourceNotFoundException("Servidor efetivo não encontrado"));
     }
 
 }
