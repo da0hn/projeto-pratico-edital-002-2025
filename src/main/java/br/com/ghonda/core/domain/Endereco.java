@@ -60,10 +60,21 @@ public class Endereco implements Serializable {
     @ManyToMany(mappedBy = "enderecos")
     private Set<Pessoa> pessoas = new HashSet<>(0);
 
+    @Builder.Default
+    @ManyToMany(mappedBy = "enderecos")
+    private Set<Unidade> unidades = new HashSet<>(0);
+
     public void addPessoa(final Pessoa pessoa) {
         this.pessoas.add(pessoa);
         if (!pessoa.getEnderecos().contains(this)) {
             pessoa.addEndereco(this);
+        }
+    }
+
+    public void addUnidade(final Unidade unidade) {
+        this.unidades.add(unidade);
+        if (!unidade.getEnderecos().contains(this)) {
+            unidade.addEndereco(this);
         }
     }
 

@@ -1,5 +1,6 @@
 package br.com.ghonda.core.domain;
 
+import br.com.ghonda.core.dto.NewUnidadePayload;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -52,7 +53,16 @@ public class Unidade implements Serializable {
         joinColumns = @JoinColumn(name = "unid_id"),
         inverseJoinColumns = @JoinColumn(name = "end_id")
     )
+    @Builder.Default
     private Set<Endereco> enderecos = new HashSet<>(0);
+
+    public static Unidade of(final NewUnidadePayload payload) {
+        return Unidade.builder()
+            .id(null)
+            .nome(payload.nome())
+            .sigla(payload.sigla())
+            .build();
+    }
 
     @Override
     public final int hashCode() {
@@ -80,6 +90,13 @@ public class Unidade implements Serializable {
             .append("nome", this.nome)
             .append("sigla", this.sigla)
             .toString();
+    }
+
+    public void addEndereco(final Endereco endereco) {
+        this.enderecos.add(endereco);
+        if (!endereco.getUnidades().contains(this)) {
+            endereco.addUnidade(this);
+        }
     }
 
 }
