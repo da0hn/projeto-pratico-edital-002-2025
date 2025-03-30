@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>br.com.ghonda</groupId>
-    <artifactId>projeto-pratico-edital-002-2025</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>projeto-pratico-edital-002-2025</name>
-    <description>projeto-pratico-edital-002-2025</description>
+    <artifactId>sistema-gestao-institucional</artifactId>
+    <version>1.0.0</version>
+    <name>sistema-gestao-institucional</name>
+    <description>API responsável pela gestão de servidores efetivos e temporários e lotação de endereços funcionais</description>
     <url/>
     <licenses>
         <license/>
