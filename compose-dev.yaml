@@ -1,0 +1,16 @@
+services:
+  sistema-gestao-institucional-db:
+    image: 'postgres:latest'
+    container_name: sistema-gestao-institucional-db
+    environment:
+      - POSTGRES_DB=sistema_gestao_institucional
+      - POSTGRES_USER=user_sistema_gestao_institucional
+      - POSTGRES_PASSWORD=12345678
+    ports:
+      - '5482:5432'
+    volumes:
+      - sistema-gestao-institucional-db-volume:/var/lib/postgresql/data
+volumes:
+  sistema-gestao-institucional-db-volume:
+    name: sistema-gestao-institucional-db-volume
+    external: true
