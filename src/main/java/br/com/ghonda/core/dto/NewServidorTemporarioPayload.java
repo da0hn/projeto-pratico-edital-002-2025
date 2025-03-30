@@ -3,6 +3,8 @@ package br.com.ghonda.core.dto;
 import br.com.ghonda.core.annotations.Period;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.extern.jackson.Jacksonized;
 
 import java.time.LocalDate;
 
@@ -11,6 +13,8 @@ import java.time.LocalDate;
     endDate = "dataDemissao",
     message = "A data de demissão deve ser maior que a data de admissão"
 )
+@Builder
+@Jacksonized
 public record NewServidorTemporarioPayload(
     @JsonUnwrapped
     PessoaDetailPayload pessoa,
