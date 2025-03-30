@@ -1,5 +1,6 @@
 package br.com.ghonda.core.domain;
 
+import br.com.ghonda.core.dto.ServidorEfetivoPayload;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -26,6 +27,18 @@ public class ServidorEfetivo extends Pessoa {
 
     @Column(name = "se_matricula", length = 20)
     private String matricula;
+
+    public static ServidorEfetivo of(final ServidorEfetivoPayload payload) {
+        return ServidorEfetivo.builder()
+            .id(null)
+            .matricula(payload.matricula())
+            .nome(payload.pessoa().nome())
+            .nomeMae(payload.pessoa().nomeMae())
+            .nomePai(payload.pessoa().nomePai())
+            .sexo(payload.pessoa().sexo())
+            .dataNascimento(payload.pessoa().dataNascimento())
+            .build();
+    }
 
     @Override
     public String toString() {

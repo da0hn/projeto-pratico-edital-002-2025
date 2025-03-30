@@ -1,10 +1,10 @@
 package br.com.ghonda.core.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -64,14 +64,26 @@ public abstract class Pessoa implements Serializable {
     @Column(name = "pes_pai", length = 200)
     private String nomePai;
 
-    @Builder.Default
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {
+        CascadeType.DETACH,
+        CascadeType.MERGE,
+        CascadeType.PERSIST,
+        CascadeType.REFRESH
+    })
     @JoinTable(
         name = "pessoa_endereco",
         joinColumns = @JoinColumn(name = "pes_id"),
         inverseJoinColumns = @JoinColumn(name = "end_id")
     )
+    @Builder.Default
     private Set<Endereco> enderecos = new HashSet<>();
+
+    public void addEndereco(final Endereco endereco) {
+        this.enderecos.add(endereco);
+        if (!endereco.getPessoas().contains(this)) {
+            endereco.addPessoa(this);
+        }
+    }
 
     @Override
     public final int hashCode() {
