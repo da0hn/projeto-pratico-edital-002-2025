@@ -1,5 +1,6 @@
 package br.com.ghonda.core.domain;
 
+import br.com.ghonda.core.dto.CidadeDetailPayload;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -43,6 +44,13 @@ public class Cidade implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(name = "cid_uf")
     private UF uf;
+
+    public static Cidade of(final CidadeDetailPayload payload) {
+        return Cidade.builder()
+            .nome(payload.nome())
+            .uf(payload.uf())
+            .build();
+    }
 
     @Override
     public final int hashCode() {

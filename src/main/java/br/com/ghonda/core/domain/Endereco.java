@@ -60,6 +60,13 @@ public class Endereco implements Serializable {
     @ManyToMany(mappedBy = "enderecos")
     private Set<Pessoa> pessoas = new HashSet<>(0);
 
+    public void addPessoa(final Pessoa pessoa) {
+        this.pessoas.add(pessoa);
+        if (!pessoa.getEnderecos().contains(this)) {
+            pessoa.addEndereco(this);
+        }
+    }
+
     @Override
     public final int hashCode() {
         return this instanceof HibernateProxy ?
