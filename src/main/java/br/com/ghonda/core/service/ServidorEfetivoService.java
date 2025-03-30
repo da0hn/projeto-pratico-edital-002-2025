@@ -66,6 +66,8 @@ public class ServidorEfetivoService {
 
         this.servidorEfetivoRepository.save(servidorEfetivo);
 
+        log.info("Servidor efetivo {} atualizado com sucesso", servidorEfetivo);
+
         return ServidorSimpleDetailPayload.of(servidorEfetivo);
     }
 
