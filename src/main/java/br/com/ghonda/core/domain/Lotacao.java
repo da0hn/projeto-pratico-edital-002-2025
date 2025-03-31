@@ -1,5 +1,6 @@
 package br.com.ghonda.core.domain;
 
+import br.com.ghonda.core.dto.NewLotacaoPayload;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -54,6 +55,15 @@ public class Lotacao implements Serializable {
 
     @Column(name = "lot_portaria", length = 100)
     private String portaria;
+
+    public static Lotacao of(final NewLotacaoPayload payload) {
+        return Lotacao.builder()
+            .id(null)
+            .dataLotacao(payload.dataLotacao())
+            .dataRemocao(payload.dataRemocao())
+            .portaria(payload.portaria())
+            .build();
+    }
 
     @Override
     public final int hashCode() {
