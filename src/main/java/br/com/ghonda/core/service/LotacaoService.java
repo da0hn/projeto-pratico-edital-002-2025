@@ -3,6 +3,7 @@ package br.com.ghonda.core.service;
 import br.com.ghonda.core.domain.Lotacao;
 import br.com.ghonda.core.dto.LotacaoDetailPayload;
 import br.com.ghonda.core.dto.NewLotacaoPayload;
+import br.com.ghonda.core.dto.UpdateLotacaoPayload;
 import br.com.ghonda.core.exceptions.ResourceNotFoundException;
 import br.com.ghonda.core.repository.LotacaoRepository;
 import br.com.ghonda.core.repository.PessoaRepository;
@@ -27,10 +28,10 @@ public class LotacaoService {
     public LotacaoDetailPayload registrar(final NewLotacaoPayload payload) {
         log.debug("m=registrar(payload={})", payload);
 
-        final var unidade = this.unidadeRepository.findById(payload.idUnidade())
+        final var unidade = this.unidadeRepository.findById(payload.unidadeId())
             .orElseThrow(() -> new ResourceNotFoundException("Unidade não encontrada"));
 
-        final var pessoa = this.pessoaRepository.findById(payload.idServidor())
+        final var pessoa = this.pessoaRepository.findById(payload.servidorId())
             .orElseThrow(() -> new ResourceNotFoundException("Servidor não encontrado"));
 
         final var newLotacao = Lotacao.of(payload);
@@ -52,7 +53,7 @@ public class LotacaoService {
     }
 
     @Transactional
-    public LotacaoDetailPayload update(final LotacaoDetailPayload payload) {
+    public LotacaoDetailPayload update(final UpdateLotacaoPayload payload) {
         log.debug("m=update(payload={})", payload);
 
         final var lotacao = this.lotacaoRepository.findById(payload.id())

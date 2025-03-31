@@ -2,7 +2,6 @@ package br.com.ghonda.core.dto;
 
 import br.com.ghonda.core.domain.Lotacao;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.extern.jackson.Jacksonized;
 
@@ -12,8 +11,8 @@ import java.time.LocalDate;
 @Jacksonized
 public record LotacaoDetailPayload(
     Long id,
-    Long idServidor,
-    Long idUnidade,
+    Long servidorId,
+    Long unidadeId,
     @JsonFormat(pattern = "dd/MM/yyyy")
     LocalDate dataLotacao,
     @JsonFormat(pattern = "dd/MM/yyyy")
@@ -24,8 +23,8 @@ public record LotacaoDetailPayload(
     public static LotacaoDetailPayload of(final Lotacao newLotacao) {
         return LotacaoDetailPayload.builder()
             .id(newLotacao.getId())
-            .idServidor(newLotacao.getPessoa().getId())
-            .idUnidade(newLotacao.getUnidade().getId())
+            .servidorId(newLotacao.getPessoa().getId())
+            .unidadeId(newLotacao.getUnidade().getId())
             .dataLotacao(newLotacao.getDataLotacao())
             .dataRemocao(newLotacao.getDataRemocao())
             .portaria(newLotacao.getPortaria())

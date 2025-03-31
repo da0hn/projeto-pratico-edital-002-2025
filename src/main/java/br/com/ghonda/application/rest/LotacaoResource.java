@@ -3,6 +3,7 @@ package br.com.ghonda.application.rest;
 import br.com.ghonda.application.rest.payload.ApiResponse;
 import br.com.ghonda.core.dto.LotacaoDetailPayload;
 import br.com.ghonda.core.dto.NewLotacaoPayload;
+import br.com.ghonda.core.dto.UpdateLotacaoPayload;
 import br.com.ghonda.core.service.LotacaoService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -36,7 +37,7 @@ public class LotacaoResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<LotacaoDetailPayload>> atualizarLotacao(@Valid @RequestBody final LotacaoDetailPayload payload) {
+    public ResponseEntity<ApiResponse<LotacaoDetailPayload>> atualizarLotacao(@Valid @RequestBody final UpdateLotacaoPayload payload) {
         log.debug("m=atualizarLotacao(payload={})", payload);
 
         final var response = this.lotacaoService.update(payload);

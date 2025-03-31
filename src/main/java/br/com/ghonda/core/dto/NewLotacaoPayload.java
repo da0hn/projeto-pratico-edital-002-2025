@@ -9,9 +9,9 @@ import java.time.LocalDate;
 
 public record NewLotacaoPayload(
     @NotNull(message = "O id do servidor não pode ser nulo")
-    Long idServidor,
+    Long servidorId,
     @NotNull(message = "O id da unidade não pode ser nulo")
-    Long idUnidade,
+    Long unidadeId,
     @NotNull(message = "A data de lotação não pode ser nula")
     @JsonFormat(pattern = "dd/MM/yyyy")
     LocalDate dataLotacao,
