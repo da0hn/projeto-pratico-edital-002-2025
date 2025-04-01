@@ -10,7 +10,22 @@ services:
       - '5482:5432'
     volumes:
       - sistema-gestao-institucional-db-volume:/var/lib/postgresql/data
+  minio:
+    image: 'minio/minio:latest'
+    container_name: sistema-gestao-institucional-minio
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin123
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    command: server /data --console-address ":9001"
+    volumes:
+      - sistema-gestao-institucional-minio-data:/data
 volumes:
   sistema-gestao-institucional-db-volume:
     name: sistema-gestao-institucional-db-volume
+    external: true
+  sistema-gestao-institucional-minio-data:
+    name: sistema-gestao-institucional-minio-data
     external: true
