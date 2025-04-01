@@ -4,11 +4,11 @@ spring:
     version: @project.version@
   docker:
     compose:
-      enabled: ${DOCKER_COMPOSE_ENABLED:true}
+      enabled: ${DOCKER_COMPOSE_ENABLED:false}
       file: compose-dev.yaml
       lifecycle-management: start_only
   datasource:
-    url: jdbc:postgresql://localhost:5482/sistema_gestao_institucional
+    url: jdbc:postgresql://${DB_HOST:database}:${DB_PORT:5432}/sistema_gestao_institucional
     username: ${DB_USERNAME:user_sistema_gestao_institucional}
     password: ${DB_PASSWORD:12345678}
   jpa:
@@ -21,7 +21,7 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 minio:
-  url: ${MINIO_URL:http://localhost:9000}
+  url: http://${MINIO_HOST:minio}:9000
   access-key: ${MINIO_ACCESS_KEY:minioadmin}
   secret-key: ${MINIO_SECRET_KEY:minioadmin123}
   bucket-name: ${MINIO_BUCKET_NAME:sistema-gestao-institucional}

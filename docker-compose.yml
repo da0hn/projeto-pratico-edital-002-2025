@@ -22,6 +22,22 @@ services:
     command: server /data --console-address ":9001"
     volumes:
       - sistema-gestao-institucional-minio-data:/data
+  api:
+    image: 'sistema-gestao-institucional:latest'
+    container_name: sistema-gestao-institucional
+    build:
+      context: .
+    ports:
+      - '8080:8080'
+    environment:
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_USERNAME=user_sistema_gestao_institucional
+      - DB_PASSWORD=12345678
+      - MINIO_HOST=minio
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin123
+      - JWT_SECRET=6f27a8212e780877821336520f8ba1baa189f4ab8cd3f30a0e2c84f0e6bfecb7
 volumes:
   sistema-gestao-institucional-db-volume:
     name: sistema-gestao-institucional-db-volume
