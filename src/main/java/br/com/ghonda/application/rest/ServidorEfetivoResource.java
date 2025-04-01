@@ -3,6 +3,7 @@ package br.com.ghonda.application.rest;
 import br.com.ghonda.application.rest.payload.ApiCollectionPageResponse;
 import br.com.ghonda.application.rest.payload.ApiResponse;
 import br.com.ghonda.core.domain.UF;
+import br.com.ghonda.core.dto.EnderecoDetailPayload;
 import br.com.ghonda.core.dto.NewServidorEfetivoPayload;
 import br.com.ghonda.core.dto.SearchServidorEfetivoPayload;
 import br.com.ghonda.core.dto.ServidorEfetivoLotadoPayload;
@@ -94,6 +95,14 @@ public class ServidorEfetivoResource {
         final Pageable pageable
     ) {
         return ResponseEntity.ok(ApiCollectionPageResponse.of(this.service.findAllLotados(unidadeId, pageable)));
+    }
+
+    @GetMapping("/endereco-funcional")
+    public ResponseEntity<ApiCollectionPageResponse<EnderecoDetailPayload>> findEnderecoFuncional(
+        @RequestParam("nome") final String nome,
+        final Pageable pageable
+    ) {
+        return ResponseEntity.ok(ApiCollectionPageResponse.of(this.service.findEnderecoFuncional(nome,pageable)));
     }
 
 }

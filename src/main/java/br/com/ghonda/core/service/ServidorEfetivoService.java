@@ -1,12 +1,14 @@
 package br.com.ghonda.core.service;
 
 import br.com.ghonda.core.domain.ServidorEfetivo;
+import br.com.ghonda.core.dto.EnderecoDetailPayload;
 import br.com.ghonda.core.dto.NewServidorEfetivoPayload;
 import br.com.ghonda.core.dto.SearchServidorEfetivoPayload;
 import br.com.ghonda.core.dto.ServidorEfetivoLotadoPayload;
 import br.com.ghonda.core.dto.ServidorSimpleDetailPayload;
 import br.com.ghonda.core.dto.UpdateServidorEfetivoPayload;
 import br.com.ghonda.core.exceptions.ResourceNotFoundException;
+import br.com.ghonda.core.repository.EnderecoRepository;
 import br.com.ghonda.core.repository.ServidorEfetivoRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,8 @@ public class ServidorEfetivoService {
     private final EnderecoService enderecoService;
 
     private final FotoPessoaService fotoPessoaService;
+
+    private final EnderecoRepository enderecoRepository;
 
     @Transactional
     public ServidorSimpleDetailPayload registrar(final NewServidorEfetivoPayload payload) {
@@ -88,12 +92,22 @@ public class ServidorEfetivoService {
         ).map(ServidorSimpleDetailPayload::of);
     }
 
+    @Transactional
     public Page<ServidorEfetivoLotadoPayload> findAllLotados(
         final Long unidadeId,
         final Pageable pageable
     ) {
         return this.servidorEfetivoRepository.findAllLotados(unidadeId, pageable)
-            .map(projection -> ServidorEfetivoLotadoPayload.of(projection, this.fotoPessoaService.findUrlByPessoaId(projection.getId())));
+            .map(projection -> ServidorEfetivoLotadoPayload.of(
+                projection,
+                this.fotoPessoaService.findUrlByPessoaId(projection.getId())
+            ));
+    }
+
+    @Transactional
+    public Page<EnderecoDetailPayload> findEnderecoFuncional(final String nomeServidorEfetivo, final Pageable pageable) {
+        return this.enderecoRepository.findEnderecoFuncionalUnidade(nomeServidorEfetivo, pageable)
+            .map(EnderecoDetailPayload::of);
     }
 
 }
