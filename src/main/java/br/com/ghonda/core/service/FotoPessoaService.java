@@ -53,9 +53,17 @@ public class FotoPessoaService {
         log.info("Foto do pessoa {} registrada com sucesso", pessoa);
     }
 
+    @Transactional
     public List<FotoPessoaDetailPayload> findAll(final Long pessoaId) {
         return this.fotoPessoaRepository.findAllByPessoaId(pessoaId).stream()
             .map(foto -> FotoPessoaDetailPayload.of(foto, this.fileSystemService.getObject(foto.getHash())))
+            .toList();
+    }
+
+    @Transactional
+    public List<String> findUrlByPessoaId(final Long pessoaId) {
+        return  this.fotoPessoaRepository.findAllByPessoaId(pessoaId).stream()
+            .map(foto ->  this.fileSystemService.getObject(foto.getHash()))
             .toList();
     }
 

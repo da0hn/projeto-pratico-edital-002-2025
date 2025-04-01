@@ -3,6 +3,7 @@ package br.com.ghonda.core.service;
 import br.com.ghonda.core.domain.ServidorEfetivo;
 import br.com.ghonda.core.dto.NewServidorEfetivoPayload;
 import br.com.ghonda.core.dto.SearchServidorEfetivoPayload;
+import br.com.ghonda.core.dto.ServidorEfetivoLotadoPayload;
 import br.com.ghonda.core.dto.ServidorSimpleDetailPayload;
 import br.com.ghonda.core.dto.UpdateServidorEfetivoPayload;
 import br.com.ghonda.core.exceptions.ResourceNotFoundException;
@@ -10,6 +11,7 @@ import br.com.ghonda.core.repository.ServidorEfetivoRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,8 @@ public class ServidorEfetivoService {
     private final ServidorEfetivoRepository servidorEfetivoRepository;
 
     private final EnderecoService enderecoService;
+
+    private final FotoPessoaService fotoPessoaService;
 
     @Transactional
     public ServidorSimpleDetailPayload registrar(final NewServidorEfetivoPayload payload) {
@@ -82,6 +86,14 @@ public class ServidorEfetivoService {
             payload.uf(),
             payload.pageable()
         ).map(ServidorSimpleDetailPayload::of);
+    }
+
+    public Page<ServidorEfetivoLotadoPayload> findAllLotados(
+        final Long unidadeId,
+        final Pageable pageable
+    ) {
+        return this.servidorEfetivoRepository.findAllLotados(unidadeId, pageable)
+            .map(projection -> ServidorEfetivoLotadoPayload.of(projection, this.fotoPessoaService.findUrlByPessoaId(projection.getId())));
     }
 
 }

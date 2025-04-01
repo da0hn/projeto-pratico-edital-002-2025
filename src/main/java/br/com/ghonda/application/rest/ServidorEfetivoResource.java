@@ -5,6 +5,7 @@ import br.com.ghonda.application.rest.payload.ApiResponse;
 import br.com.ghonda.core.domain.UF;
 import br.com.ghonda.core.dto.NewServidorEfetivoPayload;
 import br.com.ghonda.core.dto.SearchServidorEfetivoPayload;
+import br.com.ghonda.core.dto.ServidorEfetivoLotadoPayload;
 import br.com.ghonda.core.dto.ServidorSimpleDetailPayload;
 import br.com.ghonda.core.dto.UpdateServidorEfetivoPayload;
 import br.com.ghonda.core.service.ServidorEfetivoService;
@@ -85,6 +86,14 @@ public class ServidorEfetivoResource {
         );
 
         return ResponseEntity.ok(ApiCollectionPageResponse.of(response));
+    }
+
+    @GetMapping("/lotados")
+    public ResponseEntity<ApiCollectionPageResponse<ServidorEfetivoLotadoPayload>> findAllLotados(
+        @RequestParam("unidade-id") final Long unidadeId,
+        final Pageable pageable
+    ) {
+        return ResponseEntity.ok(ApiCollectionPageResponse.of(this.service.findAllLotados(unidadeId, pageable)));
     }
 
 }
