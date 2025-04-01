@@ -1,6 +1,7 @@
 package br.com.ghonda.application.rest;
 
 import br.com.ghonda.application.rest.payload.ApiFailureResponse;
+import br.com.ghonda.core.exceptions.InvalidTokenException;
 import br.com.ghonda.core.exceptions.ResourceNotFoundException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
@@ -11,6 +12,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -120,6 +123,54 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
             .message(exception.getMessage())
             .code(status.value())
             .status(status.toString())
+            .build();
+
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ApiFailureResponse> handleInvalidTokenException(final InvalidTokenException exception) {
+        log.error("m=handleInvalidTokenException(message={})", exception.getMessage(), exception);
+
+        final var status = HttpStatus.UNAUTHORIZED;
+
+        final var response = ApiFailureResponse.builder()
+            .message(exception.getMessage())
+            .code(status.value())
+            .status(status.toString())
+            .timestamp(LocalDateTime.now())
+            .build();
+
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiFailureResponse> handleBadCredentialsException(final BadCredentialsException exception) {
+        log.error("m=handleBadCredentialsException(message={})", exception.getMessage(), exception);
+
+        final var status = HttpStatus.UNAUTHORIZED;
+
+        final var response = ApiFailureResponse.builder()
+            .message("Credenciais inválidas")
+            .code(status.value())
+            .status(status.toString())
+            .timestamp(LocalDateTime.now())
+            .build();
+
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ApiFailureResponse> handleUsernameNotFoundException(final UsernameNotFoundException exception) {
+        log.error("m=handleUsernameNotFoundException(message={})", exception.getMessage(), exception);
+
+        final var status = HttpStatus.NOT_FOUND;
+
+        final var response = ApiFailureResponse.builder()
+            .message(exception.getMessage())
+            .code(status.value())
+            .status(status.toString())
+            .timestamp(LocalDateTime.now())
             .build();
 
         return ResponseEntity.status(status).body(response);
