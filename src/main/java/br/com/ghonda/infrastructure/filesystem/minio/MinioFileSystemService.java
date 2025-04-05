@@ -84,7 +84,7 @@ public class MinioFileSystemService implements FileSystemService {
                     .bucket(this.properties.bucketName())
                     .object(objectName)
                     .method(Method.GET)
-                    .expiry(300)
+                    .expiry((int) this.properties.presignedUrlExpiration().toMillis())
                     .build()
             );
         }
