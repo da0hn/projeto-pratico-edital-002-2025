@@ -92,7 +92,7 @@ public class ServidorEfetivoResource {
     @GetMapping("/lotados")
     public ResponseEntity<ApiCollectionPageResponse<ServidorEfetivoLotadoPayload>> findAllLotados(
         @RequestParam("unidade-id") final Long unidadeId,
-        final Pageable pageable
+        @PageableDefault(sort = "nome", direction = Sort.Direction.ASC) final Pageable pageable
     ) {
         return ResponseEntity.ok(ApiCollectionPageResponse.of(this.service.findAllLotados(unidadeId, pageable)));
     }

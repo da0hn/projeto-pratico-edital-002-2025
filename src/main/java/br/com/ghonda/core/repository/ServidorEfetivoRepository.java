@@ -48,17 +48,17 @@ public interface ServidorEfetivoRepository extends JpaRepository<ServidorEfetivo
                     unidade.unid_nome as unidadeNome,
                     unidade.unid_sigla as unidadeSigla
                   from servidor_efetivo efetivo
-                  inner join pessoa pessoa on efetivo.pes_id = pessoa.pes_id
-                  inner join lotacao lotacao on efetivo.pes_id = lotacao.pes_id
-                  inner join unidade unidade on lotacao.unid_id = unidade.unid_id
+                  inner join pessoa on efetivo.pes_id = pessoa.pes_id
+                  inner join lotacao on efetivo.pes_id = lotacao.pes_id
+                  inner join unidade on lotacao.unid_id = unidade.unid_id
                   where lotacao.unid_id = :unidadeId
                 """,
         countQuery = """
                      select count(*)
                      from servidor_efetivo efetivo
-                     inner join pessoa pessoa on efetivo.pes_id = pessoa.pes_id
-                     inner join lotacao lotacao on efetivo.pes_id = lotacao.pes_id
-                     inner join unidade unidade on lotacao.unid_id = unidade.unid_id
+                     inner join pessoa on efetivo.pes_id = pessoa.pes_id
+                     inner join lotacao on efetivo.pes_id = lotacao.pes_id
+                     inner join unidade on lotacao.unid_id = unidade.unid_id
                      where lotacao.unid_id = :unidadeId
                      """,
         nativeQuery = true

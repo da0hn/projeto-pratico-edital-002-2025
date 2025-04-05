@@ -11,7 +11,6 @@ import java.util.List;
 @Builder
 @Jacksonized
 public record ServidorEfetivoLotadoPayload(
-    Long id,
     String nome,
     Integer idade,
     Long unidadeId,
@@ -25,7 +24,6 @@ public record ServidorEfetivoLotadoPayload(
         final List<String> urls
     ) {
         return ServidorEfetivoLotadoPayload.builder()
-            .id(projection.getId())
             .nome(projection.getNome())
             .idade(Period.between(projection.getDataNascimento(), LocalDate.now()).getYears())
             .unidadeId(projection.getUnidadeId())
