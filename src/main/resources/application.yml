@@ -27,5 +27,5 @@ minio:
   bucket-name: ${MINIO_BUCKET_NAME:sistema-gestao-institucional}
 jwt:
   secret: ${JWT_SECRET:6f27a8212e780877821336520f8ba1baa189f4ab8cd3f30a0e2c84f0e6bfecb7}
-  expiration: 300000 # 5 minutos em milissegundos
-  refresh-expiration: 3600000 # 1 hora em milissegundos
+  expiration: ${JWT_EXPIRATION:300000} # 5 minutos em milissegundos
+  refresh-expiration: ${JWT_REFRESH_EXPIRATION:3600000} # 1 hora em milissegundos
