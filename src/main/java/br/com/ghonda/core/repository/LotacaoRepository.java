@@ -12,7 +12,6 @@ import java.time.LocalDate;
 
 public interface LotacaoRepository extends JpaRepository<Lotacao, Long> {
 
-    // AND (:portaria IS NULL OR lower(l.portaria) LIKE lower(concat('', cast(:portaria as string), '%')))
     @Query(
         value = """
             SELECT l
