@@ -102,3 +102,21 @@ Ele irá baixar as imagens necessárias, criar os containers e iniciar a aplica�
 | Endpoint para refresh do token |          `http://localhost:8080/v1/auth/refresh-token`          |     8080      |                 -                 |             -             |
 |            Swagger             |          `http://localhost:8080/swagger-ui/index.html`          |     8080      |                 -                 |             -             |
 
+## Tabela de variáveis de ambiente
+
+|  Nome da variável de ambiente  |                                                     Descrição                                                      |                           Valor padrão                           |
+|:------------------------------:|:------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------:|
+|     DOCKER_COMPOSE_ENABLED     | Habilita o uso do Docker Compose para executar a aplicação. Se `true`, o Docker Compose (dev.yaml) será utilizado. |                              false                               |
+|            DB_HOST             | Endereço do host do banco de dados PostgreSQL, por padrão irá apontar para o container criado pelo docker compose  |                             database                             |
+|            DB_PORT             |       Porta do banco de dados PostgreSQL, por padrão irá apontar para o container criado pelo docker compose       |                               5432                               |
+|          DB_USERNAME           |                       Usuário do banco de dados PostgreSQL que será utilizado pela aplicação                       |                user_sistema_gestao_institucional                 |
+|          DB_PASSWORD           |                        Senha do banco de dados PostgreSQL que será utilizado pela aplicação                        |                             12345678                             |
+|           MINIO_HOST           |           Endereço do host do MinIO, por padrão irá apontar para o container criado pelo docker compose            |                              minio                               |
+|           MINIO_PORT           |                 Porta do MinIO, por padrão irá apontar para o container criado pelo docker compose                 |                               9000                               |
+|        MINIO_ACCESS_KEY        |                                              Chave de acesso do MinIO                                              |                            minioadmin                            |
+|        MINIO_SECRET_KEY        |                                               Chave secreta do MinIO                                               |                          minioadmin123                           |
+|       MINIO_BUCKET_NAME        |                                    Nome do bucket que será utilizado pelo MinIO                                    |                   sistema-gestao-institucional                   |
+| MINIO_PRESIGNED_URL_EXPIRATION |                                    Tempo de expiração da url gerada pelo MinIO                                     |                          5m (5 minutos)                          |
+|         JWT_SECRET_KEY         |                                     Chave secreta utilizada para assinar o JWT                                     | 6f27a8212e780877821336520f8ba1baa189f4ab8cd3f30a0e2c84f0e6bfecb7 |
+|         JWT_EXPIRATION         |                                          Tempo de expiração do JWT gerado                                          |                        300000 (5 minutos)                        |
+|     JWT_REFRESH_EXPIRATION     |                                        Tempo de expiração do refresh token                                         |                         3600000 (1 hora)                         |
