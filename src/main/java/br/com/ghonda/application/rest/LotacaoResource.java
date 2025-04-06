@@ -7,12 +7,13 @@ import br.com.ghonda.core.dto.NewLotacaoPayload;
 import br.com.ghonda.core.dto.SearchLotacaoPayload;
 import br.com.ghonda.core.dto.UpdateLotacaoPayload;
 import br.com.ghonda.core.service.LotacaoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,11 +31,32 @@ import java.time.LocalDate;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/v1/lotacoes")
+@Tag(name = "Lotação", description = "Endpoints para gestão de lotações")
 public class LotacaoResource {
 
     private final LotacaoService lotacaoService;
 
     @PostMapping
+    @Operation(
+        summary = "Registrar lotação",
+        description = "Endpoint para registrar uma nova lotação"
+    )
+    @ApiResponses(
+        value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "201",
+                description = "Lotação registrada com sucesso"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "400",
+                description = "Dados inválidos fornecidos"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "500",
+                description = "Erro interno no servidor"
+            )
+        }
+    )
     public ResponseEntity<ApiResponse<LotacaoDetailPayload>> registrarLotacao(@Valid @RequestBody final NewLotacaoPayload payload) {
         log.info("Registrar lotação: {}", payload);
 
@@ -45,6 +67,30 @@ public class LotacaoResource {
     }
 
     @PutMapping("/{id}")
+    @Operation(
+        summary = "Atualizar lotação",
+        description = "Endpoint para atualizar uma lotação existente"
+    )
+    @ApiResponses(
+        value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "200",
+                description = "Lotação atualizada com sucesso"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "400",
+                description = "Dados inválidos fornecidos"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "404",
+                description = "Lotação não encontrada"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "500",
+                description = "Erro interno no servidor"
+            )
+        }
+    )
     public ResponseEntity<ApiResponse<LotacaoDetailPayload>> atualizarLotacao(@Valid @RequestBody final UpdateLotacaoPayload payload) {
         log.info("Atualizar lotação: {}", payload);
 
@@ -55,6 +101,30 @@ public class LotacaoResource {
     }
 
     @GetMapping
+    @Operation(
+        summary = "Buscar lotações",
+        description = "Endpoint para buscar lotações com paginação"
+    )
+    @ApiResponses(
+        value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "200",
+                description = "Lotações encontradas com sucesso"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "204",
+                description = "Nenhum dado encontrado"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "400",
+                description = "Dados inválidos fornecidos"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "500",
+                description = "Erro interno no servidor"
+            )
+        }
+    )
     public ResponseEntity<ApiCollectionPageResponse<LotacaoDetailPayload>> findAll(
         @RequestParam(value = "id", required = false) final Long id,
         @RequestParam(value = "servidorId", required = false) final Long servidorId,
@@ -80,12 +150,35 @@ public class LotacaoResource {
                 .dataFimRemocao(dataFimRemocao)
                 .build()
         );
+        if (response.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(ApiCollectionPageResponse.of(response));
     }
 
     @GetMapping("/{id}")
+    @Operation(
+        summary = "Buscar lotação por ID",
+        description = "Endpoint para buscar uma lotação específica pelo ID"
+    )
+    @ApiResponses(
+        value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "200",
+                description = "Lotação encontrada com sucesso"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "404",
+                description = "Lotação não encontrada"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "500",
+                description = "Erro interno no servidor"
+            )
+        }
+    )
     public ResponseEntity<ApiResponse<LotacaoDetailPayload>> findById(@PathVariable final Long id) {
         log.info("Buscar lotação por id: {}", id);
 
