@@ -1,14 +1,16 @@
 package br.com.ghonda.core.service;
 
 import br.com.ghonda.core.domain.ServidorTemporario;
-import br.com.ghonda.core.repository.ServidorTemporarioRepository;
 import br.com.ghonda.core.dto.NewServidorTemporarioPayload;
+import br.com.ghonda.core.dto.SearchServidorTemporarioPayload;
 import br.com.ghonda.core.dto.ServidorSimpleDetailPayload;
 import br.com.ghonda.core.dto.UpdateServidorTemporarioPayload;
 import br.com.ghonda.core.exceptions.ResourceNotFoundException;
+import br.com.ghonda.core.repository.ServidorTemporarioRepository;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,6 +74,15 @@ public class ServidorTemporarioService {
         log.info("Servidor temporário atualizado com sucesso: {}", servidorTemporario);
 
         return ServidorSimpleDetailPayload.of(servidorTemporario);
+    }
+
+    public Page<ServidorSimpleDetailPayload> findAll(final SearchServidorTemporarioPayload payload) {
+        return this.servidorTemporarioRepository.findAll(
+            payload.nome(),
+            payload.nomeCidade(),
+            payload.uf(),
+            payload.pageable()
+        ).map(ServidorSimpleDetailPayload::of);
     }
 
 }
