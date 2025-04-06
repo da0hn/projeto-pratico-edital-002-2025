@@ -1,8 +1,8 @@
 package br.com.ghonda.infrastructure.security.configuration;
 
 import br.com.ghonda.core.repository.UsuarioRepository;
+import br.com.ghonda.core.service.JwtService;
 import br.com.ghonda.infrastructure.security.JwtAuthenticationFilter;
-import br.com.ghonda.infrastructure.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

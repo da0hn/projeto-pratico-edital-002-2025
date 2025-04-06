@@ -1,5 +1,6 @@
 package br.com.ghonda.infrastructure.security;
 
+import br.com.ghonda.core.service.JwtService;
 import br.com.ghonda.infrastructure.security.configuration.JwtConfig;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -17,23 +18,27 @@ import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
-public class JwtService {
+public class JwtServiceImpl implements JwtService {
 
     private final JwtConfig jwtConfig;
 
+    @Override
     public String extractUsername(final String token) {
         return this.extractClaim(token, Claims::getSubject);
     }
 
-    public <T> T extractClaim(final String token, final Function<Claims, T> claimsResolver) {
+    private <T> T extractClaim(final String token, final Function<? super Claims, T> claimsResolver) {
         final Claims claims = this.extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
+    @Override
     public String generateToken(final UserDetails userDetails) {
-        return this.generateToken(new HashMap<>(), userDetails);
+        final var extraClaims = new HashMap<String, Object>();
+        return this.generateToken(extraClaims, userDetails);
     }
 
+    @Override
     public String generateRefreshToken(final UserDetails userDetails) {
         return Jwts
             .builder()
@@ -45,7 +50,7 @@ public class JwtService {
             .compact();
     }
 
-    public String generateToken(final Map<String, Object> extraClaims, final UserDetails userDetails) {
+    private String generateToken(final Map<String, Object> extraClaims, final UserDetails userDetails) {
         return Jwts
             .builder()
             .setClaims(extraClaims)
@@ -56,6 +61,7 @@ public class JwtService {
             .compact();
     }
 
+    @Override
     public boolean isTokenValid(final String token, final UserDetails userDetails) {
         final String username = this.extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !this.isTokenExpired(token);
