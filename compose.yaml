@@ -38,6 +38,17 @@ services:
       - MINIO_ACCESS_KEY=minioadmin
       - MINIO_SECRET_KEY=minioadmin123
       - JWT_SECRET=6f27a8212e780877821336520f8ba1baa189f4ab8cd3f30a0e2c84f0e6bfecb7
+  pgadmin:
+    image: dpage/pgadmin4:8.10
+    container_name: pgadmin4
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: administrador@admin.com.br
+      PGADMIN_DEFAULT_PASSWORD: 12345678
+    volumes:
+      - sistema-gestao-institucional-pgadmin-data:/var/lib/pgadmin
 volumes:
   sistema-gestao-institucional-db-volume:
     name: sistema-gestao-institucional-db-volume
