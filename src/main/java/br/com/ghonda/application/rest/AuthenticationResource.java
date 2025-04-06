@@ -1,5 +1,6 @@
 package br.com.ghonda.application.rest;
 
+import br.com.ghonda.application.rest.payload.ApiResponse;
 import br.com.ghonda.core.dto.AuthenticationPayload;
 import br.com.ghonda.core.dto.AuthenticationDetailPayload;
 import br.com.ghonda.core.dto.RefreshTokenPayload;
@@ -19,17 +20,19 @@ public class AuthenticationResource {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/token")
-    public ResponseEntity<AuthenticationDetailPayload> authenticate(
+    public ResponseEntity<ApiResponse<AuthenticationDetailPayload>> authenticate(
         @RequestBody final AuthenticationPayload request
     ) {
-        return ResponseEntity.ok(this.authenticationService.authenticate(request));
+        final var response = this.authenticationService.authenticate(request);
+        return ResponseEntity.ok(ApiResponse.of(response));
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<AuthenticationDetailPayload> refreshToken(
+    public ResponseEntity<ApiResponse<AuthenticationDetailPayload>> refreshToken(
         @RequestBody final RefreshTokenPayload request
     ) {
-        return ResponseEntity.ok(this.authenticationService.refreshToken(request));
+        final var response = this.authenticationService.refreshToken(request);
+        return ResponseEntity.ok(ApiResponse.of(response));
     }
 
 }
