@@ -22,10 +22,24 @@ services:
     command: server /data --console-address ":9001"
     volumes:
       - sistema-gestao-institucional-minio-data:/data
+  pgadmin:
+    image: dpage/pgadmin4:8.10
+    container_name: pgadmin4
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: administrador@admin.com.br
+      PGADMIN_DEFAULT_PASSWORD: 12345678
+    volumes:
+      - sistema-gestao-institucional-pgadmin-data:/var/lib/pgadmin
 volumes:
   sistema-gestao-institucional-db-volume:
     name: sistema-gestao-institucional-db-volume
     external: true
   sistema-gestao-institucional-minio-data:
     name: sistema-gestao-institucional-minio-data
+    external: true
+  sistema-gestao-institucional-pgadmin-data:
+    name: sistema-gestao-institucional-pgadmin-data
     external: true
