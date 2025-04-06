@@ -20,10 +20,10 @@ public interface LotacaoRepository extends JpaRepository<Lotacao, Long> {
             AND (:servidorId IS NULL OR l.pessoa.id = :servidorId)
             AND (:unidadeId IS NULL OR l.unidade.id = :unidadeId)
             AND (:portaria IS NULL OR lower(l.portaria) LIKE lower(concat('', cast(:portaria as string), '%')))
-            AND (:#{#dataInicioLotacao == null} = true OR l.dataLotacao >= :dataInicioLotacao)
-            AND (:#{#dataFimLotacao == null} = true OR l.dataLotacao <= :dataFimLotacao)
-            AND (:#{#dataInicioRemocao == null} = true OR l.dataRemocao >= :dataInicioRemocao)
-            AND (:#{#dataFimRemocao == null} = true OR l.dataRemocao <= :dataFimRemocao)
+            AND ( cast(:dataInicioLotacao as date) is null or l.dataLotacao >= :dataInicioLotacao)
+            AND ( cast(:dataFimLotacao as date) is null or l.dataLotacao <= :dataFimLotacao)
+            AND ( cast(:dataInicioRemocao as date) is null or l.dataRemocao >= :dataInicioRemocao)
+            AND ( cast(:dataFimRemocao as date) is null or l.dataRemocao <= :dataFimRemocao)
         """,
         countQuery = """
             SELECT COUNT(l)
@@ -32,10 +32,10 @@ public interface LotacaoRepository extends JpaRepository<Lotacao, Long> {
             AND (:servidorId IS NULL OR l.pessoa.id = :servidorId)
             AND (:unidadeId IS NULL OR l.unidade.id = :unidadeId)
             AND (:portaria IS NULL OR lower(l.portaria) LIKE lower(concat('', cast(:portaria as string), '%')))
-            AND (:#{#dataInicioLotacao == null} = true OR l.dataLotacao >= :dataInicioLotacao)
-            AND (:#{#dataFimLotacao == null} = true OR l.dataLotacao <= :dataFimLotacao)
-            AND (:#{#dataInicioRemocao == null} = true OR l.dataRemocao >= :dataInicioRemocao)
-            AND (:#{#dataFimRemocao == null} = true OR l.dataRemocao <= :dataFimRemocao)
+            AND ( cast(:dataInicioLotacao as date) is null or l.dataLotacao >= :dataInicioLotacao)
+            AND ( cast(:dataFimLotacao as date) is null or l.dataLotacao <= :dataFimLotacao)
+            AND ( cast(:dataInicioRemocao as date) is null or l.dataRemocao >= :dataInicioRemocao)
+            AND ( cast(:dataFimRemocao as date) is null or l.dataRemocao <= :dataFimRemocao)
         """
     )
     Page<Lotacao> findAllBy(
