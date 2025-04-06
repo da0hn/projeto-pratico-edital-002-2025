@@ -10,12 +10,15 @@
 * A estrutura do banco de dados foi criada utilizando o Flyway, que é uma ferramenta de migração de banco de dados.
 * A aplicação foi desenvolvida utilizando o padrão MVC porém a organização dos pacotes segue os conceitos da Arquitetura Hexagonal.
 * A autenticação foi implementada utilizando o Spring Security com JWT.
-* A documentação da API foi gerada utilizando o Swagger.
+  * Ao subir a aplicação será criado um usuário default para que seja possível chamar os outros endpoints ou criar novos usuários. 
+  * Username: `administrador@admin.com.br`, Senha: `12345678`
+* A documentação da API foi gerada utilizando o [Swagger](http://localhost:8080/swagger-ui/index.html).
 * A aplicação possui dois arquivos de configuração do `docker compose`.
   * O `dev.yaml` deve ser utilizado para desenvolvimento local e ele será utilizado pelo `Spring Boot` quando a variável de ambiente `DOCKER_COMPOSE_ENABLED` for `true`.
   * O `compose.yaml` deve ser utilizado para validar o que foi implementado, ele cria a imagem do container da api 
     `sistema-gestao-institucional:latest` quando o parâmetro `--build` é informado no comando `docker-compose up`.
-* 
+* Os volumes devem ser criados antes de subir a aplicação, na seção abaixo `Configuração do Ambiente` estão os comandos para criar os volumes.
+* Foi utilizado a estratégia de `multi-stage build` para que não seja necessário instalar as dependências do `Maven` e `Java` na máquina local.
 
 ## Requisitos
 
@@ -87,6 +90,8 @@ docker-compose up -d --build
 ```
 
 Ele irá baixar as imagens necessárias, criar os containers e iniciar a aplicação em segundo plano.
+
+## Tabela de aplicações, URLs e Credenciais
 
 |           Aplicação            |                               URL                               | Porta Externa |              Usuário              |           Senha           |
 |:------------------------------:|:---------------------------------------------------------------:|:-------------:|:---------------------------------:|:-------------------------:|
