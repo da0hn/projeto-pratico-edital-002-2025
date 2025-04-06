@@ -7,6 +7,6 @@ public interface FileSystemService {
 
     FileDetailPayload uploadObject(MultipartFile file);
 
-    String getObject(String objectName);
+    String getObjectUrl(String objectName);
 
 }

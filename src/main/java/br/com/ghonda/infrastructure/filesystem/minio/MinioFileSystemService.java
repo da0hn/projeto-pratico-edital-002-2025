@@ -77,7 +77,7 @@ public class MinioFileSystemService implements FileSystemService {
     }
 
     @Override
-    public String getObject(final String objectName) {
+    public String getObjectUrl(final String objectName) {
         try {
             return this.minioClient.getPresignedObjectUrl(
                 GetPresignedObjectUrlArgs.builder()
