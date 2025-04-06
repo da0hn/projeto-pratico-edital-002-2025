@@ -1,13 +1,18 @@
 package br.com.ghonda.application.rest;
 
+import br.com.ghonda.application.rest.payload.ApiCollectionPageResponse;
 import br.com.ghonda.application.rest.payload.ApiResponse;
 import br.com.ghonda.core.dto.LotacaoDetailPayload;
 import br.com.ghonda.core.dto.NewLotacaoPayload;
+import br.com.ghonda.core.dto.SearchLotacaoPayload;
 import br.com.ghonda.core.dto.UpdateLotacaoPayload;
 import br.com.ghonda.core.service.LotacaoService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +21,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.LocalDate;
 
 @Slf4j
 @RestController
@@ -44,6 +52,37 @@ public class LotacaoResource {
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(ApiResponse.of(response));
+    }
+
+    @GetMapping
+    public ResponseEntity<ApiCollectionPageResponse<LotacaoDetailPayload>> findAll(
+        @RequestParam(value = "id", required = false) final Long id,
+        @RequestParam(value = "servidorId", required = false) final Long servidorId,
+        @RequestParam(value = "unidadeId", required = false) final Long unidadeId,
+        @RequestParam(value = "portaria", required = false) final String portaria,
+        @RequestParam(value = "data-inicio-lotacao", required = false) final LocalDate dataInicioLotacao,
+        @RequestParam(value = "data-fim-lotacao", required = false) final LocalDate dataFimLotacao,
+        @RequestParam(value = "data-inicio-remocao", required = false) final LocalDate dataInicioRemocao,
+        @RequestParam(value = "data-fim-remocao", required = false) final LocalDate dataFimRemocao,
+        final Pageable pageable
+    ) {
+        log.info("Buscar lotações com paginação: {}", pageable);
+
+        final var response = this.lotacaoService.findAll(
+            SearchLotacaoPayload.builder()
+                .id(id)
+                .servidorId(servidorId)
+                .unidadeId(unidadeId)
+                .portaria(portaria)
+                .dataInicioLotacao(dataInicioLotacao)
+                .dataFimLotacao(dataFimLotacao)
+                .dataInicioRemocao(dataInicioRemocao)
+                .dataFimRemocao(dataFimRemocao)
+                .build()
+        );
+
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(ApiCollectionPageResponse.of(response));
     }
 
     @GetMapping("/{id}")

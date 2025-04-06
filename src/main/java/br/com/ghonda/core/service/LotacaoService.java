@@ -3,6 +3,7 @@ package br.com.ghonda.core.service;
 import br.com.ghonda.core.domain.Lotacao;
 import br.com.ghonda.core.dto.LotacaoDetailPayload;
 import br.com.ghonda.core.dto.NewLotacaoPayload;
+import br.com.ghonda.core.dto.SearchLotacaoPayload;
 import br.com.ghonda.core.dto.UpdateLotacaoPayload;
 import br.com.ghonda.core.exceptions.ResourceNotFoundException;
 import br.com.ghonda.core.repository.LotacaoRepository;
@@ -10,6 +11,7 @@ import br.com.ghonda.core.repository.PessoaRepository;
 import br.com.ghonda.core.repository.UnidadeRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +68,20 @@ public class LotacaoService {
         this.lotacaoRepository.save(lotacao);
 
         return LotacaoDetailPayload.of(lotacao);
+    }
+
+    public Page<LotacaoDetailPayload> findAll(SearchLotacaoPayload payload) {
+        return this.lotacaoRepository.findAllBy(
+            payload.id(),
+            payload.servidorId(),
+            payload.unidadeId(),
+            payload.portaria(),
+            payload.dataInicioLotacao(),
+            payload.dataFimLotacao(),
+            payload.dataInicioRemocao(),
+            payload.dataFimRemocao(),
+            payload.pageable()
+        ).map(LotacaoDetailPayload::of);
     }
 
 }
