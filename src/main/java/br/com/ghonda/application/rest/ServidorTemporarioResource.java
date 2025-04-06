@@ -9,6 +9,9 @@ import br.com.ghonda.core.dto.SearchServidorTemporarioPayload;
 import br.com.ghonda.core.dto.ServidorSimpleDetailPayload;
 import br.com.ghonda.core.dto.UpdateServidorTemporarioPayload;
 import br.com.ghonda.core.service.ServidorTemporarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,11 +33,32 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/v1/servidores/temporarios")
+@Tag(name = "Servidor Temporário", description = "Endpoints para gestão de servidores temporários")
 public class ServidorTemporarioResource {
 
     private final ServidorTemporarioService service;
 
     @PostMapping
+    @Operation(
+        summary = "Registrar servidor temporário",
+        description = "Endpoint para registrar um novo servidor temporário"
+    )
+    @ApiResponses(
+        value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "201",
+                description = "Servidor temporário registrado com sucesso"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "400",
+                description = "Dados inválidos fornecidos"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "500",
+                description = "Erro interno no servidor"
+            )
+        }
+    )
     public ResponseEntity<ApiResponse<ServidorSimpleDetailPayload>> registrarServidorEfetivo(@Valid @RequestBody final NewServidorTemporarioPayload payload) {
         log.info("Registrar servidor temporário: {}", payload);
 
@@ -45,6 +69,26 @@ public class ServidorTemporarioResource {
     }
 
     @GetMapping("/{id}")
+    @Operation(
+        summary = "Buscar servidor temporário por ID",
+        description = "Endpoint para buscar um servidor temporário pelo ID"
+    )
+    @ApiResponses(
+        value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "200",
+                description = "Servidor temporário encontrado"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "404",
+                description = "Servidor temporário não encontrado"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "500",
+                description = "Erro interno no servidor"
+            )
+        }
+    )
     public ResponseEntity<ApiResponse<ServidorSimpleDetailPayload>> findById(@PathVariable final Long id) {
         log.info("Buscar servidor temporário por id: {}", id);
 
@@ -54,6 +98,26 @@ public class ServidorTemporarioResource {
     }
 
     @GetMapping
+    @Operation(
+        summary = "Buscar servidores temporários",
+        description = "Endpoint para buscar servidores temporários com paginação"
+    )
+    @ApiResponses(
+        value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "200",
+                description = "Servidores temporários encontrados"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "204",
+                description = "Nenhum servidor temporário encontrado"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "500",
+                description = "Erro interno no servidor"
+            )
+        }
+    )
     public ResponseEntity<ApiCollectionPageResponse<ServidorSimpleDetailPayload>> findAll(
         @RequestParam(value = "nome", required = false) final String nome,
         @RequestParam(value = "matricula", required = false) final String matricula,
@@ -72,10 +136,38 @@ public class ServidorTemporarioResource {
                 .build()
         );
 
+        if (response.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
         return ResponseEntity.ok(ApiCollectionPageResponse.of(response));
     }
 
     @PutMapping("/{id}")
+    @Operation(
+        summary = "Atualizar servidor temporário",
+        description = "Endpoint para atualizar um servidor temporário"
+    )
+    @ApiResponses(
+        value = {
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "200",
+                description = "Servidor temporário atualizado com sucesso"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "400",
+                description = "Dados inválidos fornecidos"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "404",
+                description = "Servidor temporário não encontrado"
+            ),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                responseCode = "500",
+                description = "Erro interno no servidor"
+            )
+        }
+    )
     public ResponseEntity<ApiResponse<ServidorSimpleDetailPayload>> update(
         @PathVariable final Long id,
         @Valid @RequestBody final UpdateServidorTemporarioPayload payload
