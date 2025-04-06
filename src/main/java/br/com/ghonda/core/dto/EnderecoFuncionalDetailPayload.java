@@ -1,42 +1,69 @@
 package br.com.ghonda.core.dto;
 
-import br.com.ghonda.core.domain.ServidorEfetivo;
-import br.com.ghonda.core.domain.ServidorTemporario;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import br.com.ghonda.core.domain.Endereco;
+import br.com.ghonda.core.domain.Lotacao;
+import br.com.ghonda.core.domain.Pessoa;
+import br.com.ghonda.core.domain.Unidade;
 import lombok.Builder;
 import lombok.extern.jackson.Jacksonized;
 
-import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Builder
 @Jacksonized
 public record EnderecoFuncionalDetailPayload(
-    Long id,
-    @JsonUnwrapped
-    PessoaDetailPayload pessoa,
-    String matricula,
-    LocalDate dataAdmissao,
-    LocalDate dataDemissao
+    String tipoLogradouro,
+    String logradouro,
+    Long numero,
+    String bairro,
+    CidadeDetailPayload cidade,
+    List<UnidadePayload> unidades
 ) {
 
-    public static EnderecoFuncionalDetailPayload of(final ServidorEfetivo efetivo) {
+    public static EnderecoFuncionalDetailPayload of(final Endereco endereco) {
         return new EnderecoFuncionalDetailPayload(
-            efetivo.getId(),
-            PessoaDetailPayload.of(efetivo),
-            efetivo.getMatricula(),
-            null,
-            null
+            endereco.getTipoLogradouro(),
+            endereco.getLogradouro(),
+            endereco.getNumero(),
+            endereco.getBairro(),
+            CidadeDetailPayload.of(endereco.getCidade()),
+            endereco.getUnidades()
+                .stream()
+                .map(UnidadePayload::of)
+                .toList()
         );
     }
 
-    public static EnderecoFuncionalDetailPayload of(final ServidorTemporario temporario) {
-        return new EnderecoFuncionalDetailPayload(
-            temporario.getId(),
-            PessoaDetailPayload.of(temporario),
-            null,
-            temporario.getDataAdmissao(),
-            temporario.getDataDemissao()
-        );
+    @Builder
+    public record UnidadePayload(Long id, String nome, String sigla, Set<ServidorPayload> servidores) {
+
+        public static UnidadePayload of(final Unidade unidade) {
+            return UnidadePayload.builder()
+                .id(unidade.getId())
+                .nome(unidade.getNome())
+                .sigla(unidade.getSigla())
+                .servidores(unidade.getLotacoes()
+                                .stream()
+                                .map(Lotacao::getPessoa)
+                                .map(ServidorPayload::of)
+                                .collect(Collectors.toSet())
+                )
+                .build();
+        }
+
+    }
+
+    public record ServidorPayload(Long id, String nome) {
+
+        public static ServidorPayload of(final Pessoa pessoa) {
+            return new ServidorPayload(
+                pessoa.getId(),
+                pessoa.getNome()
+            );
+        }
+
     }
 
 }

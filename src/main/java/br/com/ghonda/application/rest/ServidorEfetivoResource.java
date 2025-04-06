@@ -4,6 +4,7 @@ import br.com.ghonda.application.rest.payload.ApiCollectionPageResponse;
 import br.com.ghonda.application.rest.payload.ApiResponse;
 import br.com.ghonda.core.domain.UF;
 import br.com.ghonda.core.dto.EnderecoDetailPayload;
+import br.com.ghonda.core.dto.EnderecoFuncionalDetailPayload;
 import br.com.ghonda.core.dto.NewServidorEfetivoPayload;
 import br.com.ghonda.core.dto.SearchServidorEfetivoPayload;
 import br.com.ghonda.core.dto.ServidorEfetivoLotadoPayload;
@@ -99,7 +100,7 @@ public class ServidorEfetivoResource {
     }
 
     @GetMapping("/endereco-funcional")
-    public ResponseEntity<ApiCollectionPageResponse<EnderecoDetailPayload>> findEnderecoFuncional(
+    public ResponseEntity<ApiCollectionPageResponse<EnderecoFuncionalDetailPayload>> findEnderecoFuncional(
         @RequestParam("nome") final String nome,
         final Pageable pageable
     ) {

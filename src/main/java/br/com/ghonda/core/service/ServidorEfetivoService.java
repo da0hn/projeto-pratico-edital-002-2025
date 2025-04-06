@@ -2,6 +2,7 @@ package br.com.ghonda.core.service;
 
 import br.com.ghonda.core.domain.ServidorEfetivo;
 import br.com.ghonda.core.dto.EnderecoDetailPayload;
+import br.com.ghonda.core.dto.EnderecoFuncionalDetailPayload;
 import br.com.ghonda.core.dto.NewServidorEfetivoPayload;
 import br.com.ghonda.core.dto.SearchServidorEfetivoPayload;
 import br.com.ghonda.core.dto.ServidorEfetivoLotadoPayload;
@@ -105,9 +106,9 @@ public class ServidorEfetivoService {
     }
 
     @Transactional
-    public Page<EnderecoDetailPayload> findEnderecoFuncional(final String nomeServidorEfetivo, final Pageable pageable) {
+    public Page<EnderecoFuncionalDetailPayload> findEnderecoFuncional(final String nomeServidorEfetivo, final Pageable pageable) {
         return this.enderecoRepository.findEnderecoFuncionalUnidade(nomeServidorEfetivo, pageable)
-            .map(EnderecoDetailPayload::of);
+            .map(EnderecoFuncionalDetailPayload::of);
     }
 
 }

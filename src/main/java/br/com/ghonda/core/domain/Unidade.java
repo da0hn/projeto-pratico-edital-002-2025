@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -55,6 +57,9 @@ public class Unidade implements Serializable {
     )
     @Builder.Default
     private Set<Endereco> enderecos = new HashSet<>(0);
+
+    @OneToMany(mappedBy = "unidade")
+    private Set<Lotacao> lotacoes = new HashSet<>(0);
 
     public static Unidade of(final NewUnidadePayload payload) {
         return Unidade.builder()
@@ -98,5 +103,8 @@ public class Unidade implements Serializable {
             endereco.addUnidade(this);
         }
     }
+
+
+
 
 }

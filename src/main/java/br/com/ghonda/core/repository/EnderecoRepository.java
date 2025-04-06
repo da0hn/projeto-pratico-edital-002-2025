@@ -11,21 +11,21 @@ public interface EnderecoRepository extends JpaRepository<Endereco, Long>, Query
 
     @Query(
         value = """
-                select e.*
+                select distinct e.*
                 from endereco e
                 inner join unidade_endereco ue on e.end_id = ue.end_id
                 inner join unidade u on ue.unid_id = u.unid_id
                 inner join lotacao l on u.unid_id = l.unid_id
-                inner join public.pessoa p on l.pes_id = p.pes_id
+                inner join pessoa p on l.pes_id = p.pes_id
                 where lower(p.pes_nome) like lower(concat('%', :nomeServidorEfetivo, '%'))
                 """,
         countQuery = """
-                     select count(*)
+                     select count(distinct *)
                      from endereco e
                      inner join unidade_endereco ue on e.end_id = ue.end_id
                      inner join unidade u on ue.unid_id = u.unid_id
                      inner join lotacao l on u.unid_id = l.unid_id
-                     inner join public.pessoa p on l.pes_id = p.pes_id
+                     inner join pessoa p on l.pes_id = p.pes_id
                      where lower(p.pes_nome) like lower(concat('%', :nomeServidorEfetivo, '%'))
                      """,
         nativeQuery = true
