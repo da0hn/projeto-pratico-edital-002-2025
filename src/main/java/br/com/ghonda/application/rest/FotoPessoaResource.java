@@ -27,6 +27,7 @@ public class FotoPessoaResource {
         @PathVariable("pessoaId") final Long pessoaId,
         @RequestParam("file") final MultipartFile file
     ) {
+        log.info("Upload da imagem para pessoa com id: {}", pessoaId);
 
         this.fotoPessoaService.upload(pessoaId, file);
 
@@ -35,6 +36,7 @@ public class FotoPessoaResource {
 
     @GetMapping("/{pessoaId}/imagem")
     public ResponseEntity<ApiCollectionResponse<FotoPessoaDetailPayload>> findAll(@PathVariable("pessoaId") final Long pessoaId) {
+        log.info("Buscar imagens para pessoa com id: {}", pessoaId);
 
         final var response = this.fotoPessoaService.findAll(pessoaId);
 

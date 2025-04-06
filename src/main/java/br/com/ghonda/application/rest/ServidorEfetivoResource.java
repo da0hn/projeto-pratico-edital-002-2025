@@ -74,7 +74,7 @@ public class ServidorEfetivoResource {
         @RequestParam(value = "uf", required = false) final UF uf,
         @PageableDefault(size = 15, sort = { "nome" }, direction = Sort.Direction.ASC) final Pageable pageable
     ) {
-        log.info("Buscar todos os servidores efetivos");
+        log.info("Buscar servidores efetivos com nome: {}, matricula: {}, nomeCidade: {}, uf: {}, pageable: {}", nome, matricula, nomeCidade, uf, pageable);
 
         final var response = this.service.findAll(
             SearchServidorEfetivoPayload.builder()
@@ -94,6 +94,7 @@ public class ServidorEfetivoResource {
         @RequestParam("unidade-id") final Long unidadeId,
         @PageableDefault(sort = "nome", direction = Sort.Direction.ASC) final Pageable pageable
     ) {
+        log.info("Buscar servidores efetivos lotados na unidade: {}, pageable: {}", unidadeId, pageable);
         return ResponseEntity.ok(ApiCollectionPageResponse.of(this.service.findAllLotados(unidadeId, pageable)));
     }
 
@@ -102,6 +103,7 @@ public class ServidorEfetivoResource {
         @RequestParam("nome") final String nome,
         final Pageable pageable
     ) {
+        log.info("Buscar endereços funcionais com nome: {}, pageable: {}", nome, pageable);
         return ResponseEntity.ok(ApiCollectionPageResponse.of(this.service.findEnderecoFuncional(nome,pageable)));
     }
 

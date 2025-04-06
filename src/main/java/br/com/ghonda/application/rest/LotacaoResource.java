@@ -28,7 +28,7 @@ public class LotacaoResource {
 
     @PostMapping
     public ResponseEntity<ApiResponse<LotacaoDetailPayload>> registrarLotacao(@Valid @RequestBody final NewLotacaoPayload payload) {
-        log.debug("m=registrarLotacao(payload={})", payload);
+        log.info("Registrar lotação: {}", payload);
 
         final var response = this.lotacaoService.registrar(payload);
 
@@ -38,7 +38,7 @@ public class LotacaoResource {
 
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<LotacaoDetailPayload>> atualizarLotacao(@Valid @RequestBody final UpdateLotacaoPayload payload) {
-        log.debug("m=atualizarLotacao(payload={})", payload);
+        log.info("Atualizar lotação: {}", payload);
 
         final var response = this.lotacaoService.update(payload);
 
@@ -48,7 +48,7 @@ public class LotacaoResource {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<LotacaoDetailPayload>> findById(@PathVariable final Long id) {
-        log.debug("m=findById(id={})", id);
+        log.info("Buscar lotação por id: {}", id);
 
         final var response = this.lotacaoService.findById(id);
 
