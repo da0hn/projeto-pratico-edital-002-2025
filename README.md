@@ -22,11 +22,19 @@
    - [Upload e Recuperação de Fotografias](#upload-e-recuperação-de-fotografias)
 4. [Configuração do Ambiente](#configuração-do-ambiente)
 5. [Tabela de aplicações, URLs e Credenciais](#tabela-de-aplicações-urls-e-credenciais)
-6. [Tabela de variáveis de ambiente](#tabela-de-variáveis-de-ambiente)
+6. [Estrutura do Projeto](#estrutura-do-projeto)
+   - [Tecnologias Utilizadas](#tecnologias-utilizadas)
+7. [Desenvolvimento Local](#desenvolvimento-local)
+   - [Pré-requisitos](#pré-requisitos)
+   - [Executando a aplicação em modo de desenvolvimento](#executando-a-aplicação-em-modo-de-desenvolvimento)
+   - [Compilando o projeto](#compilando-o-projeto)
+   - [Executando testes](#executando-testes)
+8. [Tabela de variáveis de ambiente](#tabela-de-variáveis-de-ambiente)
+
 
 ## Considerações sobre a implementação
 
-* A aplicação foi desenvolvida utilizando o Java 17, Spring Boot 3.4.4 e última versão disponível do PostgreSQL.
+* A aplicação foi desenvolvida utilizando o Java 21, Spring Boot 3.4.4 e última versão disponível do PostgreSQL.
 * A estrutura do banco de dados foi criada utilizando o Flyway, que é uma ferramenta de migração de banco de dados.
 * A aplicação foi desenvolvida utilizando o padrão MVC porém a organização dos pacotes segue os conceitos da Arquitetura Hexagonal.
 * A autenticação foi implementada utilizando o Spring Security com JWT.
@@ -712,6 +720,95 @@ Ele irá baixar as imagens necessárias, criar os containers e iniciar a aplica�
 | Endpoint para refresh do token |          `http://localhost:8080/v1/auth/refresh-token`          |     8080      |                 -                 |             -             |
 |            Swagger             |          `http://localhost:8080/swagger-ui/index.html`          |     8080      |                 -                 |             -             |
 
+## Estrutura do Projeto
+
+O projeto segue uma arquitetura hexagonal (também conhecida como arquitetura de portas e adaptadores) com a seguinte estrutura de pacotes:
+
+```
+src/main/java/br/com/ghonda/
+├── application/           # Camada de aplicação (controllers, payloads)
+│   └── rest/              # Controladores REST e classes de payload
+├── core/                  # Camada de domínio (regras de negócio)
+│   ├── annotations/       # Anotações personalizadas
+│   ├── domain/            # Entidades de domínio
+│   ├── dto/               # Objetos de transferência de dados
+│   ├── enums/             # Enumerações
+│   ├── exceptions/        # Exceções personalizadas
+│   ├── repository/        # Interfaces de repositório
+│   └── service/           # Serviços de domínio
+└── infrastructure/        # Camada de infraestrutura
+    ├── configuration/     # Configurações gerais
+    ├── filesystem/        # Implementação do sistema de arquivos (MinIO)
+    ├── openapi/           # Configuração do Swagger/OpenAPI
+    └── security/          # Configuração de segurança e autenticação
+```
+
+### Tecnologias Utilizadas
+
+* **Spring Boot 3.4.4**: Framework para desenvolvimento de aplicações Java
+* **Spring Data JPA**: Para acesso a dados com JPA
+* **Spring Security**: Para autenticação e autorização
+* **Flyway**: Para migração de banco de dados
+* **PostgreSQL**: Banco de dados relacional
+* **MinIO**: Armazenamento de objetos compatível com S3
+* **JWT**: Para autenticação baseada em tokens
+* **Swagger/OpenAPI**: Para documentação da API
+* **Docker & Docker Compose**: Para containerização e orquestração
+* **Maven**: Para gerenciamento de dependências e build
+
+## Desenvolvimento Local
+
+### Pré-requisitos
+
+* JDK 21
+* Maven 3.9+
+* Docker e Docker Compose
+* IDE de sua preferência (IntelliJ IDEA, Eclipse, VS Code, etc.)
+
+### Executando a aplicação em modo de desenvolvimento
+
+1. Clone o repositório:
+   ```bash
+   git clone <url-do-repositorio>
+   cd projeto-pratico-edital-002-2025
+   ```
+
+2. Crie os volumes Docker necessários (conforme descrito na seção [Configuração do Ambiente](#configuração-do-ambiente))
+
+3. Inicie os serviços de infraestrutura (PostgreSQL e MinIO):
+   ```bash
+   # Para desenvolvimento local, usando o arquivo dev.yaml
+   docker-compose -f dev.yaml up -d
+
+   # Ou para validar a implementação completa, usando o arquivo compose.yaml
+   docker-compose -f compose.yaml up -d --build
+   ```
+
+4. Execute a aplicação através da sua IDE ou via linha de comando:
+   ```bash
+   # Via Maven
+   mvn spring-boot:run
+   ```
+
+5. A aplicação estará disponível em `http://localhost:8080`
+   * Swagger UI: `http://localhost:8080/swagger-ui/index.html`
+   * MinIO Console: `http://localhost:9001`
+   * PgAdmin: `http://localhost:8888`
+
+### Compilando o projeto
+
+```bash
+mvn clean package
+```
+
+O arquivo JAR será gerado na pasta `target/sistema-gestao-institucional-api.jar`.
+
+### Executando testes
+
+```bash
+mvn test
+```
+
 ## Tabela de variáveis de ambiente
 
 |  Nome da variável de ambiente  |                                                     Descrição                                                      |                           Valor padrão                           |
@@ -730,5 +827,3 @@ Ele irá baixar as imagens necessárias, criar os containers e iniciar a aplica�
 |         JWT_SECRET_KEY         |                                     Chave secreta utilizada para assinar o JWT                                     | 6f27a8212e780877821336520f8ba1baa189f4ab8cd3f30a0e2c84f0e6bfecb7 |
 |         JWT_EXPIRATION         |                                          Tempo de expiração do JWT gerado                                          |                        300000 (5 minutos)                        |
 |     JWT_REFRESH_EXPIRATION     |                                        Tempo de expiração do refresh token                                         |                         3600000 (1 hora)                         |
-
-
