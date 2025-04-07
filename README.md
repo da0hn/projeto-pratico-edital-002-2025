@@ -55,6 +55,553 @@ Os requisitos abaixo devem ser implementados em uma aplicação web e estão dis
 
 ![Diagrama do banco de dados](.github/diagrama-db.png)
 
+## Implementação dos requisitos
+
+#### Servidor Efetivo
+
+1. **Criar Servidor Efetivo**
+   - Endpoint: `POST /v1/servidores/efetivos`
+   - Payload:
+     ```json
+     {
+       "nome": "string",
+       "nomeMae": "string",
+       "nomePai": "string",
+       "sexo": "MASCULINO|FEMININO",
+       "dataNascimento": "dd/MM/yyyy",
+       "enderecos": [
+         {
+           "tipoLogradouro": "string",
+           "logradouro": "string",
+           "numero": 0,
+           "bairro": "string",
+           "cidade": {
+             "nome": "string",
+             "uf": "AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO"
+           }
+         }
+       ],
+       "matricula": "string"
+     }
+     ```
+   - Retorno (HTTP 201):
+     ```json
+     {
+       "data": {
+         "id": 0,
+         "nome": "string",
+         "nomeMae": "string",
+         "nomePai": "string",
+         "sexo": "MASCULINO|FEMININO",
+         "dataNascimento": "dd/MM/yyyy",
+         "enderecos": [
+           {
+             "tipoLogradouro": "string",
+             "logradouro": "string",
+             "numero": 0,
+             "bairro": "string",
+             "cidade": {
+               "nome": "string",
+               "uf": "AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO"
+             }
+           }
+         ],
+         "matricula": "string"
+       }
+     }
+     ```
+
+2. **Buscar Servidor Efetivo por ID**
+   - Endpoint: `GET /v1/servidores/efetivos/{id}`
+   - Retorno (HTTP 200):
+     ```json
+     {
+       "data": {
+         "id": 0,
+         "nome": "string",
+         "nomeMae": "string",
+         "nomePai": "string",
+         "sexo": "MASCULINO|FEMININO",
+         "dataNascimento": "dd/MM/yyyy",
+         "enderecos": [
+           {
+             "tipoLogradouro": "string",
+             "logradouro": "string",
+             "numero": 0,
+             "bairro": "string",
+             "cidade": {
+               "nome": "string",
+               "uf": "AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO"
+             }
+           }
+         ],
+         "matricula": "string"
+       }
+     }
+     ```
+
+3. **Atualizar Servidor Efetivo**
+   - Endpoint: `PUT /v1/servidores/efetivos/{id}`
+   - Payload:
+     ```json
+     {
+       "id": 0,
+       "nome": "string",
+       "nomeMae": "string",
+       "nomePai": "string",
+       "sexo": "MASCULINO|FEMININO",
+       "dataNascimento": "dd/MM/yyyy",
+       "enderecos": [
+         {
+           "tipoLogradouro": "string",
+           "logradouro": "string",
+           "numero": 0,
+           "bairro": "string",
+           "cidade": {
+             "nome": "string",
+             "uf": "AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO"
+           }
+         }
+       ],
+       "matricula": "string"
+     }
+     ```
+   - Retorno (HTTP 200): Mesmo formato do retorno da busca por ID
+
+4. **Listar Servidores Efetivos**
+   - Endpoint: `GET /v1/servidores/efetivos`
+   - Parâmetros:
+     - `nome` (opcional): Filtro por nome
+     - `matricula` (opcional): Filtro por matrícula
+     - `nome-cidade` (opcional): Filtro por nome da cidade
+     - `uf` (opcional): Filtro por UF
+     - Parâmetros de paginação:
+       - `page`: Número da página (default: 0)
+       - `size`: Tamanho da página (default: 15)
+       - `sort`: Campo para ordenação (default: nome)
+   - Retorno (HTTP 200):
+     ```json
+     {
+       "data": [
+         {
+           "id": 0,
+           "nome": "string",
+           "nomeMae": "string",
+           "nomePai": "string",
+           "sexo": "MASCULINO|FEMININO",
+           "dataNascimento": "dd/MM/yyyy",
+           "enderecos": [
+             {
+               "tipoLogradouro": "string",
+               "logradouro": "string",
+               "numero": 0,
+               "bairro": "string",
+               "cidade": {
+                 "nome": "string",
+                 "uf": "AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO"
+               }
+             }
+           ],
+           "matricula": "string"
+         }
+       ],
+       "page": {
+         "size": 15,
+         "totalElements": 0,
+         "totalPages": 0,
+         "number": 0
+       }
+     }
+     ```
+
+#### Lotação
+
+1. **Criar Lotação**
+   - Endpoint: `POST /v1/lotacoes`
+   - Payload:
+     ```json
+     {
+       "servidorId": 0,
+       "unidadeId": 0,
+       "dataLotacao": "dd/MM/yyyy",
+       "dataRemocao": "dd/MM/yyyy",
+       "portaria": "string"
+     }
+     ```
+   - Retorno (HTTP 201):
+     ```json
+     {
+       "data": {
+         "id": 0,
+         "servidorId": 0,
+         "unidadeId": 0,
+         "dataLotacao": "dd/MM/yyyy",
+         "dataRemocao": "dd/MM/yyyy",
+         "portaria": "string"
+       }
+     }
+     ```
+
+2. **Buscar Lotação por ID**
+   - Endpoint: `GET /v1/lotacoes/{id}`
+   - Retorno (HTTP 200): Mesmo formato do retorno da criação
+
+3. **Atualizar Lotação**
+   - Endpoint: `PUT /v1/lotacoes/{id}`
+   - Payload:
+     ```json
+     {
+       "id": 0,
+       "dataLotacao": "dd/MM/yyyy",
+       "dataRemocao": "dd/MM/yyyy",
+       "portaria": "string"
+     }
+     ```
+   - Retorno (HTTP 200): Mesmo formato do retorno da busca por ID
+
+4. **Listar Lotações**
+   - Endpoint: `GET /v1/lotacoes`
+   - Parâmetros:
+     - `id` (opcional): Filtro por ID
+     - `servidor-id` (opcional): Filtro por ID do servidor
+     - `unidade-id` (opcional): Filtro por ID da unidade
+     - `portaria` (opcional): Filtro por portaria
+     - `data-inicio-lotacao` (opcional): Filtro por data inicial de lotação
+     - `data-fim-lotacao` (opcional): Filtro por data final de lotação
+     - `data-inicio-remocao` (opcional): Filtro por data inicial de remoção
+     - `data-fim-remocao` (opcional): Filtro por data final de remoção
+     - Parâmetros de paginação padrão
+   - Retorno (HTTP 200):
+     ```json
+     {
+       "data": [
+         {
+           "id": 0,
+           "servidorId": 0,
+           "unidadeId": 0,
+           "dataLotacao": "dd/MM/yyyy",
+           "dataRemocao": "dd/MM/yyyy",
+           "portaria": "string"
+         }
+       ],
+       "page": {
+         "size": 15,
+         "totalElements": 0,
+         "totalPages": 0,
+         "number": 0
+       }
+     }
+     ```
+
+### Consulta de Servidores Efetivos por Unidade
+
+- Endpoint: `GET /v1/servidores/efetivos/lotados`
+- Parâmetros:
+  - `unidade-id` (obrigatório): ID da unidade
+  - Parâmetros de paginação padrão
+- Retorno (HTTP 200):
+  ```json
+  {
+    "data": [
+      {
+        "nome": "string",
+        "idade": 0,
+        "unidadeId": 0,
+        "unidadeNome": "string",
+        "unidadeSigla": "string",
+        "fotografias": ["string"]
+      }
+    ],
+    "page": {
+      "size": 15,
+      "totalElements": 0,
+      "totalPages": 0,
+      "number": 0
+    }
+  }
+  ```
+
+### Consulta de Endereço Funcional por Nome do Servidor
+
+- Endpoint: `GET /v1/servidores/efetivos/endereco-funcional`
+- Parâmetros:
+  - `nome` (obrigatório): Parte do nome do servidor
+  - Parâmetros de paginação padrão
+- Retorno (HTTP 200):
+  ```json
+  {
+    "data": [
+      {
+        "tipoLogradouro": "string",
+        "logradouro": "string",
+        "numero": 0,
+        "bairro": "string",
+        "cidade": {
+          "nome": "string",
+          "uf": "AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO"
+        },
+        "unidades": [
+          {
+            "id": 0,
+            "nome": "string",
+            "sigla": "string",
+            "servidores": [
+              {
+                "id": 0,
+                "nome": "string"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "page": {
+      "size": 15,
+      "totalElements": 0,
+      "totalPages": 0,
+      "number": 0
+    }
+  }
+  ```
+
+#### Servidor Temporário
+
+1. **Criar Servidor Temporário**
+   - Endpoint: `POST /v1/servidores/temporarios`
+   - Payload:
+     ```json
+     {
+       "nome": "string",
+       "nomeMae": "string",
+       "nomePai": "string",
+       "sexo": "MASCULINO|FEMININO",
+       "dataNascimento": "dd/MM/yyyy",
+       "enderecos": [
+         {
+           "tipoLogradouro": "string",
+           "logradouro": "string",
+           "numero": 0,
+           "bairro": "string",
+           "cidade": {
+             "nome": "string",
+             "uf": "AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO"
+           }
+         }
+       ],
+       "dataAdmissao": "dd/MM/yyyy",
+       "dataDemissao": "dd/MM/yyyy"
+     }
+     ```
+   - Retorno (HTTP 201):
+     ```json
+     {
+       "data": {
+         "id": 0,
+         "nome": "string",
+         "nomeMae": "string",
+         "nomePai": "string",
+         "sexo": "MASCULINO|FEMININO",
+         "dataNascimento": "dd/MM/yyyy",
+         "enderecos": [
+           {
+             "tipoLogradouro": "string",
+             "logradouro": "string",
+             "numero": 0,
+             "bairro": "string",
+             "cidade": {
+               "nome": "string",
+               "uf": "AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO"
+             }
+           }
+         ],
+         "dataAdmissao": "dd/MM/yyyy",
+         "dataDemissao": "dd/MM/yyyy"
+       }
+     }
+     ```
+
+2. **Buscar Servidor Temporário por ID**
+   - Endpoint: `GET /v1/servidores/temporarios/{id}`
+   - Retorno (HTTP 200): Mesmo formato do retorno da criação
+
+3. **Atualizar Servidor Temporário**
+   - Endpoint: `PUT /v1/servidores/temporarios/{id}`
+   - Payload:
+     ```json
+     {
+       "id": 0,
+       "nome": "string",
+       "nomeMae": "string",
+       "nomePai": "string",
+       "sexo": "MASCULINO|FEMININO",
+       "dataNascimento": "dd/MM/yyyy",
+       "enderecos": [
+         {
+           "tipoLogradouro": "string",
+           "logradouro": "string",
+           "numero": 0,
+           "bairro": "string",
+           "cidade": {
+             "nome": "string",
+             "uf": "AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO"
+           }
+         }
+       ],
+       "dataAdmissao": "dd/MM/yyyy",
+       "dataDemissao": "dd/MM/yyyy"
+     }
+     ```
+   - Retorno (HTTP 200): Mesmo formato do retorno da busca por ID
+
+4. **Listar Servidores Temporários**
+   - Endpoint: `GET /v1/servidores/temporarios`
+   - Parâmetros:
+     - `nome` (opcional): Filtro por nome
+     - `nome-cidade` (opcional): Filtro por nome da cidade
+     - `uf` (opcional): Filtro por UF
+     - Parâmetros de paginação:
+       - `page`: Número da página (default: 0)
+       - `size`: Tamanho da página (default: 15)
+       - `sort`: Campo para ordenação (default: nome)
+   - Retorno (HTTP 200):
+     ```json
+     {
+       "data": [
+         {
+           "id": 0,
+           "nome": "string",
+           "nomeMae": "string",
+           "nomePai": "string",
+           "sexo": "MASCULINO|FEMININO",
+           "dataNascimento": "dd/MM/yyyy",
+           "enderecos": [
+             {
+               "tipoLogradouro": "string",
+               "logradouro": "string",
+               "numero": 0,
+               "bairro": "string",
+               "cidade": {
+                 "nome": "string",
+                 "uf": "AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO"
+               }
+             }
+           ],
+           "dataAdmissao": "dd/MM/yyyy",
+           "dataDemissao": "dd/MM/yyyy"
+         }
+       ],
+       "page": {
+         "size": 15,
+         "totalElements": 0,
+         "totalPages": 0,
+         "number": 0
+       }
+     }
+     ```
+
+#### Unidade
+
+1. **Criar Unidade**
+   - Endpoint: `POST /v1/unidades`
+   - Payload:
+     ```json
+     {
+       "nome": "string",
+       "sigla": "string",
+       "enderecos": [
+         {
+           "tipoLogradouro": "string",
+           "logradouro": "string",
+           "numero": 0,
+           "bairro": "string",
+           "cidade": {
+             "nome": "string",
+             "uf": "AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO"
+           }
+         }
+       ]
+     }
+     ```
+   - Retorno (HTTP 201):
+     ```json
+     {
+       "data": {
+         "id": 0,
+         "nome": "string",
+         "sigla": "string",
+         "enderecos": [
+           {
+             "tipoLogradouro": "string",
+             "logradouro": "string",
+             "numero": 0,
+             "bairro": "string",
+             "cidade": {
+               "nome": "string",
+               "uf": "AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO"
+             }
+           }
+         ]
+       }
+     }
+     ```
+
+2. **Buscar Unidade por ID**
+   - Endpoint: `GET /v1/unidades/{id}`
+   - Retorno (HTTP 200): Mesmo formato do retorno da criação
+
+3. **Atualizar Unidade**
+   - Endpoint: `PUT /v1/unidades/{id}`
+   - Payload:
+     ```json
+     {
+       "id": 0,
+       "nome": "string",
+       "sigla": "string",
+       "enderecos": [
+         {
+           "tipoLogradouro": "string",
+           "logradouro": "string",
+           "numero": 0,
+           "bairro": "string",
+           "cidade": {
+             "nome": "string",
+             "uf": "AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO"
+           }
+         }
+       ]
+     }
+     ```
+   - Retorno (HTTP 200): Mesmo formato do retorno da busca por ID
+
+### Upload e Recuperação de Fotografias
+
+1. **Upload de Fotografia**
+   - Endpoint: `POST /v1/pessoas/{pessoaId}/imagem`
+   - Payload: Arquivo de imagem enviado como `multipart/form-data`
+   - Parâmetros:
+     - `file`: Arquivo da imagem
+   - Retorno (HTTP 200): Sem conteúdo
+
+2. **Buscar Fotografias**
+   - Endpoint: `GET /v1/pessoas/{pessoaId}/imagem`
+   - Retorno (HTTP 200):
+     ```json
+     {
+       "data": [
+         {
+           "url": "string",
+           "hash": "string",
+           "data": "yyyy-MM-dd'T'HH:mm:ss",
+           "bucket": "string"
+         }
+       ]
+     }
+     ```
+   - Observações:
+     - A URL retornada é uma URL pré-assinada do MinIO com validade de 5 minutos
+     - O hash é um identificador único gerado para o arquivo usando SHA-256
+     - O bucket é o nome do bucket no MinIO onde a imagem está armazenada
+
 ## Configuração do Ambiente
 
 Para executar o projeto, é necessário ter o [Docker](https://docs.docker.com/engine/install/) e
@@ -120,3 +667,5 @@ Ele irá baixar as imagens necessárias, criar os containers e iniciar a aplica�
 |         JWT_SECRET_KEY         |                                     Chave secreta utilizada para assinar o JWT                                     | 6f27a8212e780877821336520f8ba1baa189f4ab8cd3f30a0e2c84f0e6bfecb7 |
 |         JWT_EXPIRATION         |                                          Tempo de expiração do JWT gerado                                          |                        300000 (5 minutos)                        |
 |     JWT_REFRESH_EXPIRATION     |                                        Tempo de expiração do refresh token                                         |                         3600000 (1 hora)                         |
+
+`
