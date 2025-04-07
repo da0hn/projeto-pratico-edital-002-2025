@@ -1,6 +1,7 @@
 package br.com.ghonda.infrastructure.filesystem.minio;
 
 import br.com.ghonda.core.dto.FileDetailPayload;
+import br.com.ghonda.core.exceptions.FileSystemException;
 import br.com.ghonda.core.service.FileSystemService;
 import io.minio.BucketExistsArgs;
 import io.minio.GetPresignedObjectUrlArgs;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -79,7 +82,7 @@ public class MinioFileSystemService implements FileSystemService {
     @Override
     public String getObjectUrl(final String objectName) {
         try {
-            return this.minioClient.getPresignedObjectUrl(
+            final var returnedUrl = this.minioClient.getPresignedObjectUrl(
                 GetPresignedObjectUrlArgs.builder()
                     .bucket(this.properties.bucketName())
                     .object(objectName)
@@ -87,10 +90,32 @@ public class MinioFileSystemService implements FileSystemService {
                     .expiry((int) this.properties.presignedUrlExpiration().toMillis())
                     .build()
             );
+
+            return this.overrideUrlToLocalhost(returnedUrl);
         }
         catch (final ServerException | InsufficientDataException | ErrorResponseException | IOException | NoSuchAlgorithmException |
                      InvalidKeyException | InvalidResponseException | XmlParserException | InternalException e) {
-            throw new RuntimeException(e);
+            throw new FileSystemException("Ocorreu um erro ao obter a URL do objeto " + objectName, e);
+        }
+    }
+
+    private String overrideUrlToLocalhost(final String url) {
+        try {
+            final var inputURI = new URI(url);
+            final var newURI = new URI(
+                inputURI.getScheme(),
+                inputURI.getUserInfo(),
+                "localhost",
+                inputURI.getPort(),
+                inputURI.getPath(),
+                inputURI.getQuery(),
+                inputURI.getFragment()
+            );
+            return newURI.toString();
+        }
+        catch (final URISyntaxException e) {
+            log.error("Ocorreu um erro ao reconstruir a URL da imagem retornada pelo MinIO. url: {}", url);
+            throw new FileSystemException("Ocorreu um erro ao reconstruir a URL da imagem retornada pelo MinIO", e);
         }
     }
 
