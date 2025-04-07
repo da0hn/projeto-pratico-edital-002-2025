@@ -16,6 +16,7 @@ services:
     environment:
       - MINIO_ROOT_USER=minioadmin
       - MINIO_ROOT_PASSWORD=minioadmin123
+      - MINIO_DOMAIN=localhost
     ports:
       - '9000:9000'
       - '9001:9001'
@@ -28,7 +29,4 @@ volumes:
     external: true
   sistema-gestao-institucional-minio-data:
     name: sistema-gestao-institucional-minio-data
-    external: true
-  sistema-gestao-institucional-pgadmin-data:
-    name: sistema-gestao-institucional-pgadmin-data
     external: true
