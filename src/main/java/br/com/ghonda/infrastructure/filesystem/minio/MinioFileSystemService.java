@@ -75,7 +75,7 @@ public class MinioFileSystemService implements FileSystemService {
                 .build();
         }
         catch (final Exception e) {
-            throw new RuntimeException(e);
+            throw new FileSystemException("Ocorreu um erro ao fazer o upload do arquivo " + file.getOriginalFilename(), e);
         }
     }
 
