@@ -4,6 +4,26 @@
 * Nome: Gabriel José Curvo Honda
 * Perfil: Desenvolvedor Java Pleno
 
+## Sumário
+
+1. [Considerações sobre a implementação](#considerações-sobre-a-implementação)
+2. [Requisitos](#requisitos)
+   - [Requisitos Gerais](#requisitos-gerais)
+   - [Requisitos Específicos](#requisitos-específicos)
+   - [Definição do banco de dados](#definição-do-banco-de-dados)
+3. [Implementação dos requisitos](#implementação-dos-requisitos)
+   - [Autenticação](#autenticação)
+   - [Servidor Efetivo](#servidor-efetivo)
+   - [Lotação](#lotação)
+   - [Servidor Temporário](#servidor-temporário)
+   - [Unidade](#unidade)
+   - [Consulta de Servidores Efetivos por Unidade](#consulta-de-servidores-efetivos-por-unidade)
+   - [Consulta de Endereço Funcional por Nome do Servidor](#consulta-de-endereço-funcional-por-nome-do-servidor)
+   - [Upload e Recuperação de Fotografias](#upload-e-recuperação-de-fotografias)
+4. [Configuração do Ambiente](#configuração-do-ambiente)
+5. [Tabela de aplicações, URLs e Credenciais](#tabela-de-aplicações-urls-e-credenciais)
+6. [Tabela de variáveis de ambiente](#tabela-de-variáveis-de-ambiente)
+
 ## Considerações sobre a implementação
 
 * A aplicação foi desenvolvida utilizando o Java 17, Spring Boot 3.4.4 e última versão disponível do PostgreSQL.
@@ -57,7 +77,50 @@ Os requisitos abaixo devem ser implementados em uma aplicação web e estão dis
 
 ## Implementação dos requisitos
 
-#### Servidor Efetivo
+### Autenticação
+
+1. **Gerar Token de Acesso**
+   - Endpoint: `POST /v1/auth/token`
+   - Payload:
+     ```json
+     {
+       "email": "string",
+       "password": "string"
+     }
+     ```
+   - Retorno (HTTP 200):
+     ```json
+     {
+       "data": {
+         "accessToken": "string",
+         "refreshToken": "string"
+       }
+     }
+     ```
+   - Observações:
+     - O `accessToken` tem validade de 5 minutos
+     - O `refreshToken` tem validade de 1 hora
+     - O `accessToken` deve ser enviado no header `Authorization` com o prefixo `Bearer` para acessar os endpoints protegidos
+
+2. **Renovar Token de Acesso**
+   - Endpoint: `POST /v1/auth/refresh-token`
+   - Header:
+     - `Authorization`: Bearer {refreshToken}
+   - Retorno (HTTP 200):
+     ```json
+     {
+       "data": {
+         "accessToken": "string",
+         "refreshToken": "string"
+       }
+     }
+     ```
+   - Observações:
+     - O `refreshToken` anterior é invalidado ao gerar um novo par de tokens
+     - O novo `accessToken` tem validade de 5 minutos
+     - O novo `refreshToken` tem validade de 1 hora
+
+### Servidor Efetivo
 
 1. **Criar Servidor Efetivo**
    - Endpoint: `POST /v1/servidores/efetivos`
@@ -668,4 +731,4 @@ Ele irá baixar as imagens necessárias, criar os containers e iniciar a aplica�
 |         JWT_EXPIRATION         |                                          Tempo de expiração do JWT gerado                                          |                        300000 (5 minutos)                        |
 |     JWT_REFRESH_EXPIRATION     |                                        Tempo de expiração do refresh token                                         |                         3600000 (1 hora)                         |
 
-`
+
