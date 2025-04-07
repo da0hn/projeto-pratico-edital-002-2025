@@ -127,8 +127,8 @@ public class LotacaoResource {
     )
     public ResponseEntity<ApiCollectionPageResponse<LotacaoDetailPayload>> findAll(
         @RequestParam(value = "id", required = false) final Long id,
-        @RequestParam(value = "servidorId", required = false) final Long servidorId,
-        @RequestParam(value = "unidadeId", required = false) final Long unidadeId,
+        @RequestParam(value = "servidor-id", required = false) final Long servidorId,
+        @RequestParam(value = "unidade-id", required = false) final Long unidadeId,
         @RequestParam(value = "portaria", required = false) final String portaria,
         @RequestParam(value = "data-inicio-lotacao", required = false) final LocalDate dataInicioLotacao,
         @RequestParam(value = "data-fim-lotacao", required = false) final LocalDate dataFimLotacao,
