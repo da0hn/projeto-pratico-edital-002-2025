@@ -709,6 +709,8 @@ docker-compose up -d --build
 
 Ele irá baixar as imagens necessárias, criar os containers e iniciar a aplicação em segundo plano.
 
+O projeto utiliza o Nginx como proxy reverso para o MinIO, permitindo o acesso ao serviço de armazenamento de objetos através de uma URL amigável. A configuração do Nginx está no arquivo `infrastructure/nginx.conf`.
+
 ## Tabela de aplicações, URLs e Credenciais
 
 |           Aplicação            |                               URL                               | Porta Externa |              Usuário              |           Senha           |
@@ -751,6 +753,7 @@ src/main/java/br/com/ghonda/
 * **Flyway**: Para migração de banco de dados
 * **PostgreSQL**: Banco de dados relacional
 * **MinIO**: Armazenamento de objetos compatível com S3
+* **Nginx**: Servidor web utilizado como proxy reverso para o MinIO
 * **JWT**: Para autenticação baseada em tokens
 * **Swagger/OpenAPI**: Para documentação da API
 * **Docker & Docker Compose**: Para containerização e orquestração
@@ -827,3 +830,4 @@ mvn test
 |         JWT_SECRET_KEY         |                                     Chave secreta utilizada para assinar o JWT                                     | 6f27a8212e780877821336520f8ba1baa189f4ab8cd3f30a0e2c84f0e6bfecb7 |
 |         JWT_EXPIRATION         |                                          Tempo de expiração do JWT gerado                                          |                        300000 (5 minutos)                        |
 |     JWT_REFRESH_EXPIRATION     |                                        Tempo de expiração do refresh token                                         |                         3600000 (1 hora)                         |
+|          MINIO_DOMAIN          |                                  Domínio utilizado para acessar o MinIO via Nginx                                  |                            localhost                             |
