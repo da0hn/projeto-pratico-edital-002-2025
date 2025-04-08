@@ -2,11 +2,13 @@ package br.com.ghonda.infrastructure.security;
 
 import br.com.ghonda.core.service.JwtService;
 import br.com.ghonda.infrastructure.security.configuration.JwtConfig;
+import br.com.ghonda.infrastructure.security.configuration.JwtConstants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ import java.util.function.Function;
 @Service
 @RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
+
 
     private final JwtConfig jwtConfig;
 
@@ -34,7 +37,14 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String generateToken(final UserDetails userDetails) {
-        final var extraClaims = new HashMap<String, Object>();
+        final var authorities = userDetails.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .toList();
+
+        final var extraClaims = Map.<String, Object>of(
+            "authorities", authorities
+        );
+
         return this.generateToken(extraClaims, userDetails);
     }
 
@@ -46,6 +56,7 @@ public class JwtServiceImpl implements JwtService {
             .setSubject(userDetails.getUsername())
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + this.jwtConfig.getRefreshExpiration()))
+            .setIssuer(JwtConstants.ISSUER)
             .signWith(this.getSignInKey(), SignatureAlgorithm.HS256)
             .compact();
     }
@@ -57,6 +68,7 @@ public class JwtServiceImpl implements JwtService {
             .setSubject(userDetails.getUsername())
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + this.jwtConfig.getExpiration()))
+            .setIssuer(JwtConstants.ISSUER)
             .signWith(this.getSignInKey(), SignatureAlgorithm.HS256)
             .compact();
     }
