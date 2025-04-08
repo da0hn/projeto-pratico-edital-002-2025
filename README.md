@@ -1,8 +1,7 @@
 # Processo Seletivo - PSS 02/2025/SEPLAG (Analista de TI - Perfil Junior, Pleno e Sênior)
 
-* Inscrição: 8697
+* Inscrição: 9422
 * Nome: Gabriel José Curvo Honda
-* Perfil: Desenvolvedor Java Pleno
 
 ## Sumário
 
